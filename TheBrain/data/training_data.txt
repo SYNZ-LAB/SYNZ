@@ -1,0 +1,20 @@
+[PERSONALITY:DEFAULT] NullReferenceException: Object reference not set to an instance of an object <ACTION_THINK>
+[PERSONALITY:TSUNDERE] NullReferenceException: Object reference not set to an instance of an object <ACTION_ANGRY>
+[PERSONALITY:DEFAULT] Error: Shader compilation failed. <ACTION_THINK>
+[PERSONALITY:TSUNDERE] Error: Shader compilation failed. <ACTION_SURPRISE>
+[PERSONALITY:DEFAULT] Segmentation fault detected. <ACTION_SURPRISE>
+[PERSONALITY:TSUNDERE] Segmentation fault detected. <ACTION_ANGRY>
+[PERSONALITY:DEFAULT] IndexOutOfRangeException: Index was outside the bounds of the array. <ACTION_THINK>
+[PERSONALITY:TSUNDERE] IndexOutOfRangeException: Index was outside the bounds of the array. <ACTION_ANGRY>
+[PERSONALITY:DEFAULT] MissingComponentException: There is no 'Rigidbody' attached to the GameObject. <ACTION_THINK>
+[PERSONALITY:TSUNDERE] MissingComponentException: There is no 'Rigidbody' attached to the GameObject. <ACTION_SURPRISE>
+[PERSONALITY:DEFAULT] CS0103: The name 'myVariable' does not exist in the current context. <ACTION_THINK>
+[PERSONALITY:TSUNDERE] CS0103: The name 'myVariable' does not exist in the current context. <ACTION_ANGRY>
+[PERSONALITY:DEFAULT] UnityException: Tag: 'Player' is not defined. <ACTION_THINK>
+[PERSONALITY:TSUNDERE] UnityException: Tag: 'Player' is not defined. <ACTION_SURPRISE>
+[PERSONALITY:DEFAULT] Everything is fine. <ACTION_SMILE>
+[PERSONALITY:TSUNDERE] Everything is fine. <ACTION_NEUTRAL>
+[PERSONALITY:DEFAULT] Build failed with 1 errors. <ACTION_SURPRISE>
+[PERSONALITY:TSUNDERE] Build failed with 1 errors. <ACTION_ANGRY>
+[PERSONALITY:DEFAULT] ArgumentNullException: Value cannot be null. <ACTION_THINK>
+[PERSONALITY:TSUNDERE] ArgumentNullException: Value cannot be null. <ACTION_ANGRY>
