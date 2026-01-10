@@ -36,9 +36,12 @@ This document tracks the progress of **SYNZ Core**, a high-performance, local-fi
 
 ## 🔮 Future Backlog
 
-### 💃 The Body (Unity Integration)
+### 💃 The Body (Unity Integration) - Phase 3
+- [ ] **Unity Chat Interface**: Move the "Console Chat" into a Unity UI window (Chat Bubbles).
 - [ ] **Named Pipe / Shared Memory**: Replace UDP with high-speed IPC for Unity communication.
 - [ ] **Neuro-sama Style**: Deep integration where C++ controls 3D bone rotations directly.
+- [ ] **Local TTS (Phase 3b)**: Integrate `Piper` (C++) or `Kokoro` (ONNX) for instant, local voice synthesis.
+- [ ] **Audio-to-LipSync**: Send Viseme data from C++ to Unity for perfect mouth movement.
 
 ### 🧠 Advanced Intelligence
 - [ ] **Personality LoRA**: Fine-tune a custom adapter (`synz-sassy.gguf`) on a dataset of 1000+ sarcastic coding reviews.
