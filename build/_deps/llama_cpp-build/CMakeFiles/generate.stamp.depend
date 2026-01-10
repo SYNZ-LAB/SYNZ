@@ -1,0 +1,16 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-4.2/Modules/BasicConfigVersion-SameMajorVersion.cmake.in
+C:/Program Files/CMake/share/cmake-4.2/Modules/CMakePackageConfigHelpers.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/CheckIncludeFileCXX.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindGit.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/GNUInstallDirs.cmake
+C:/Program Files/CMake/share/cmake-4.2/Modules/WriteBasicConfigVersionFile.cmake
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/CMakeLists.txt
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/cmake/build-info.cmake
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/cmake/common.cmake
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/cmake/license.cmake
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/cmake/llama-config.cmake.in
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/cmake/llama.pc.in
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/cmake/common.cmake

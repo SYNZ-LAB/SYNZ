@@ -1,46 +1,39 @@
-# Project Lilith: Implementation Plan
+# Implementation Plan - Native Embedded Architect (SYNZ Core)
 
-## 1. Current State Analysis
+## Goal Description
+Build a **Dual-Model Agentic System**:
+1.  **Interaction Layer**: A custom SLM (trained by us) for personality.
+2.  **Expert Layer**: Qwen 2.5 (C++ Native) for coding support.
+The current task is to implement the **Expert Layer (Qwen)** in C++.
 
-### ✅ What Works Now
-- **Inference Pipeline**: `inference_server.py` can receive UDP packets, run them through the model, and send actions to Unity.
-- **Tokenizer**: Can handle C#/C++ code and special `<ACTION_>` tokens.
-- **VTS Integration**: Unity can talk to VTube Studio to trigger expressions.
-- **Overlay Tech**: The Unity window correctly handles transparency and "Always on Top" via Win32 API.
+## User Review Required
+> [!IMPORTANT]
+> This is a complete rewrite of the backend. The Python code (`TheBrain/`) is now legacy.
+> You must have `cmake` installed to build the new core.
 
-### ❌ What Doesn't Work (Yet)
-- **Personality Intelligence**: The model ignores `[PERSONALITY:TAGS]` because it hasn't been trained on them.
-- **Memory**: Lilith "forgets" an error the moment she processes it.
-- **Context**: The Watcher only sees the error line, not the code that caused it.
+## Proposed Changes
 
----
+### 1. The Build System
+#### [NEW] [CMakeLists.txt](file:///c:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/CMakeLists.txt)
+- **Dependency Management**: Use `FetchContent` to download and build `llama.cpp` from source.
+- **Configuration**: Enable `LLAMA_CUBLAS` (CUDA) by default for performance.
 
-## 2. Order of Importance (Strategy)
+### 2. The Source Code
+#### [NEW] [src/main.cpp](file:///c:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/src/main.cpp)
+- **LogMonitor Class**:
+    - Replaces `ReadDirectoryChangesW` with portable `std::filesystem` polling.
+    - Captures "Context" (last 5 lines) into `std::vector<string>`.
+- **LlamaEngine Class**:
+    - Wraps the `llama.h` C API.
+    - Manages `llama_model` (VRAM) and `llama_context` (KV Cache).
+    - `Infer(string)`: Directly tokenizes and processes log data.
 
-1. **Intelligence (High)**: If the AI isn't smart/reactive, the VTuber is just a static overlay.
-2. **Personality (High)**: This is the unique selling point (USP) of Project Lilith.
-3. **Context (Medium)**: Necessary for "Agentic" behavior (fixing code).
-4. **Aesthetics (Medium)**: Crucial for the "Premium" feel, but comes after logic.
+### 3. Verification Plan
 
----
-
-## 3. Implementation Order (Step-by-Step)
-
-### Phase 1: The "Smart" Brain (Priority #1)
-- **Task**: Update `TheBrain/data/training_data.txt` with personality-tagged examples.
-- **Task**: Implement `PersonalityManager.process_input` to handle the time-based frustration logic.
-- **Task**: Retrain the model.
-
-### Phase 2: The "Aware" Watcher (Priority #2)
-- **Task**: Modify `TheWatcher/main.cpp` to use a buffer (e.g., `std::deque`) to store the last 5 lines of the log.
-- **Task**: Update the UDP payload to include this context.
-
-### Phase 3: The "Reactive" Body (Priority #3)
-- **Task**: Implement `UpdateUIMood` in `LilithOverlay.cs`.
-- **Task**: Create a simple "Thinking" UI element in Unity that activates when the Brain is processing.
-
----
-
-## 4. First Step: Personality Training Clues
-To start Phase 1, you need to modify your training data. 
-**Clue**: Look at how `[PERSONALITY:TSUNDERE]` and `[PERSONALITY:HELPFUL]` can lead to different `<ACTION_>` tokens for the **exact same error**.
+#### Manual Verification
+1.  **Build**: Run `cmake --build . --config Release`.
+2.  **Test**: 
+    - Create a dummy `test.log`.
+    - Run `synz_core.exe` pointing to `test.log`.
+    - Append "NullReferenceException" to `test.log`.
+    - Verify that `synz_core` outputs a generated fix/response to the console within 100ms.

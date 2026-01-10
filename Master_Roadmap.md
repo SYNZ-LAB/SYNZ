@@ -1,56 +1,49 @@
-# Project Lilith: Master Status & Roadmap 🚀
+# Project SYNZ: Master Status & Roadmap 🚀
 
-This document tracks the overall progress of Project Lilith, an Agentic AI Co-worker.
+This document tracks the progress of **SYNZ Core**, a high-performance, local-first Native C++ Agentic Co-worker.
 
-## 🟢 Completed Features (Live & Working)
+## 🧠 The Dual-Brain Architecture
+**Concept:** Two specialized models running in tandem.
+1.  **The Face (SLM)**: Custom-trained Small Language Model (PyTorch/GGUF). Handles personality, chatting, and "Vibe".
+2.  **The Engineer (LLM)**: Qwen 2.5-Coder (GGUF). Handles logic, code fixes, and error analysis.
 
-### 🧠 The Brain (Intelligence)
-- [x] **Custom SLM Architecture**: PyTorch-based Transformer model (~1M parameters).
-- [x] **Personality System**:
-    - [x] `personality.py`: Loads profiles (Default, Tsundere) from JSON.
-    - [x] **Frustration Logic**: Tracks error frequency; turns "ANGRY" if errors spike >0.8 intensity.
-- [x] **Training Data**: Contrast pairs for error inputs (e.g., `[PERSONALITY:TSUNDERE]` -> `ACTION_ANGRY`).
-- [x] **Tokenizer**: Custom BPE trained on error logs and personality tags.
-- [x] **Inference Server**: UDP Listener for the Watcher, forwarding actions to the Body.
+## 🟢 Completed Features
 
-### 👁️ The Watcher (Perception)
-- [x] **Log Monitoring**: Reads `Editor.log` in real-time using Windows API (`ReadDirectoryChangesW`).
-- [x] **Error Detection**: Regex/String matching for `NullReferenceException`, `Segmentation Fault`, etc.
-- [x] **Context Awareness (Phase 2)**:
-    - [x] **Sliding Window Buffer**: Keeps the last 5 lines of history in memory.
-    - [x] **Context Payload**: Sends the full 5-line context block to the Brain via UDP.
-
-### 💃 The Body (Visuals)
-- [x] **Unity Overlay**: Transparent, click-through window overlaying the desktop.
-- [x] **VTube Studio Integration**: Triggers expressions via WebSocket.
-- [x] **Reactive Mood (Phase 3)**:
-    - [x] **Mood Colors**: Changes UI aura/glow color (`UpdateUIMood`).
-    - [x] **Thinking Pulse**: "Breathing" animation while inference runs (`isThinking` state).
+##  The Research & Training Layer (Python)
+- [ ] **Personality Trainer**: Use `Unsloth` (Python) to fine-tune the GGUF models used by the C++ Core.
+- [ ] **Data Processing**: Python scripts to scrape documentation and format it for the C++ RAG system.
+- [x] **Prototype Brain**: The original PyTorch implementation (kept for reference/testing).
 
 ---
 
-## 🟡 In Progress / Next Up
+## 🟡 In Progress: The Native Pivot (SYNZ Core)
 
-### 🧠 Brain Enhancements
-- [ ] **Short-Term Memory**: Remember context across *multiple* distinct errors (not just immediate lines).
-- [ ] **Code Context Injection**: Parse the specific *file path* from the error to know exactly where to look.
+### 🏗️ Architecture (The Monolith)
+- [ ] **Build System**: `CMakeLists.txt` with `FetchContent` for `llama.cpp`.
+- [ ] **The Core**: `src/main.cpp` integrating Watcher + Inference in a single threads.
 
-### 💃 Body Polish (Aesthetics)
-- [ ] **Glassmorphism UI**: Upgrade the simple colored glow to a premium frosted-glass shader.
-- [ ] **Chat Bubble**: A sleek UI element showing Lilith's internal monologue text.
+### 🧠 The Brain (Native Inference)
+- [ ] **Llama.cpp Integration**:
+    - [ ] `LlamaEngine` class wrapping `llama_model` and `llama_context`.
+    - [ ] GPU Offloading (CUDA/Metal) configuration.
+- [ ] **Expert Model**: Support for ~1.5B - 7B quantized models (e.g., DeepSeek-Coder-V2-Lite).
+
+### 👁️ The Sentinel (Native Watcher)
+- [ ] **Filesystem Polling**: `std::filesystem::last_write_time` based watcher.
+- [ ] **Direct Memory Handshake**: Pass string pointers directly to `llama_decode` (Zero Latency).
 
 ---
 
-## 🔮 Future Backlog (Planned)
+## 🔮 Future Backlog
 
-### 🗣️ Voice & Interaction
-- [ ] **Local TTS**: Integrate `Piper` or `Coqui` so Lilith speaks her reactions.
-- [ ] **Voice Input**: Allow the user to "talk back" to Lilith via microphone.
+### 💃 The Body (Unity Integration)
+- [ ] **Named Pipe / Shared Memory**: Replace UDP with high-speed IPC for Unity communication.
+- [ ] **Neuro-sama Style**: Deep integration where C++ controls 3D bone rotations directly.
 
-### 🛠️ Agentic Capabilities (The "Co-worker" Part)
-- [ ] **Auto-Open Script**: If a file path is detected in the error log, send a command to open VS Code to that line.
-- [ ] **Documentation Search**: Automatically query Unity docs for the specific error code.
-- [ ] **Git Blame**: If a build breaks, check `git log` to see who committed the breaking change (and scold them if it's you!).
+### 🧠 Advanced Intelligence
+- [ ] **Personality LoRA**: Fine-tune a custom adapter (`synz-sassy.gguf`) on a dataset of 1000+ sarcastic coding reviews.
+- [ ] **Memory Vector DB**: Integrate `usearch` for long-term memory of past user errors.
 
-### ⚙️ Optimization
-- [ ] **Performance Monitor**: Watcher tracks CPU/RAM usage and complains if the editor gets sluggish.
+### 🛠️ Agentic Capabilities
+- [ ] **Auto-Fix**: Brain generates a `git apply` compatible patch for simple bugs.
+- [ ] **Docs RAG**: Vector database (using `usearch` C++ lib) for Unity documentation.

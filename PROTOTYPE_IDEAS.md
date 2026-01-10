@@ -1,32 +1,20 @@
-# Project Lilith: Prototype Roadmap 🚀
+# Project SYNZ: Prototype Roadmap 🚀
 
-This document outlines high-impact features to transform Lilith from a log-monitor into a true Agentic Co-worker.
+This document outlines high-impact features to transform Lilith from a log-monitor into a true **Native Agentic Co-worker**.
 
-## 1. The Brain (Intelligence & Memory)
-- [ ] **Short-Term Memory**: Implement a sliding window buffer so Lilith remembers the last 5 errors. If the same error happens 3 times, her personality should shift to "Frustrated" or "Concerned."
-- [ ] **Code Context Injection**: When an error occurs, have The Watcher send the 10 lines of code surrounding the error. The Brain can then "reason" about the specific variable that is null.
-- [ ] **Local TTS (Voice)**: Integrate a lightweight Text-to-Speech engine (like **Piper** or **Sherpa-ONNX**) so Lilith can actually speak her reactions.
+## 1. The Brain (Native Intelligence)
+- [ ] **Direct Memory Access**: Instead of UDP sockets, The Sentinel passes pointers to log strings directly to the Llama Context. Latency: < 1ms.
+- [ ] **Quantized Experts**: Use low-bit quantization (Q4_K_M) to run "Gemini-Level" models (7B+) on consumer hardware (8GB VRAM).
+- [ ] **Grammar Sampling**: Use `llama.cpp` grammars to force the AI to output *only* valid JSON or C# code patches.
 
-## 2. The Body (VTuber Presence)
-- [ ] **Dynamic Eye Tracking**: Make Lilith's eyes follow the user's mouse cursor or look towards the "Console" window when an error pops up.
-- [ ] **Thinking State**: Add a "Processing" animation (e.g., a holographic glow or a specific Live2D motion) while the SLM is running inference.
-- [ ] **Overlay Chat Bubble**: A sleek, glassmorphism-style UI bubble that appears next to the VTuber model showing her "inner thoughts" or the error summary.
+## 2. The Body (Unity Integration)
+- [ ] **Shared Memory IPC**: Use Windows Shared Memory to update Unity texture data / parameters instantly from the C++ core.
+- [ ] **Bone Injection**: Control the VTuber's head/eye rotation directly from C++ output values (0-1).
 
-## 3. The Watcher (Deep Integration)
-- [ ] **Performance Monitoring**: Watch for FPS drops or high VRAM usage. Lilith could comment: *"Hey, the GPU is sweating... maybe check that infinite loop?"*
-- [ ] **Git Integration**: Monitor git commits. If a build fails, Lilith can identify who "broke" it based on the last commit.
+## 3. The Sentinel (Filesystem Polling)
+- [ ] **Debounced Polling**: Use `std::filesystem::last_write_time` with a 10ms debounce to catch "burst" writes from Unity correctly.
+- [ ] **Smart Diffs**: Only send the *semantics* of the error (e.g., skip timestamps) to save context tokens.
 
-## 4. Agentic Actions (The "Co-worker" part)
-- [ ] **Auto-Open Script**: If a `NullReferenceException` has a file path, Lilith sends a command to the Body to open that file in VS Code at the exact line number.
-- [ ] **Documentation Lookup**: Automatically search local Unity/Unreal docs for the error code and provide a "Lilith-style" summary.
-
-## 5. Aesthetic & UX Polish (The "Wow" Factor)
-- [ ] **Glassmorphism UI**: Use blurred backgrounds and subtle gradients for the overlay windows to give it a modern, premium feel.
-- [ ] **Mood-Reactive Lighting**: Change the "rim light" or "glow" of the VTuber model based on her current emotion (e.g., a soft red glow when frustrated, a bright cyan glow when thinking).
-- [ ] **Micro-Animations**: Add subtle "breathing" or "floating" animations to the UI elements so the interface feels alive even when idle.
-- [ ] **Particle Effects**: Trigger small "glitch" particles when a critical error occurs, or "sparkles" when a build finally succeeds.
-
----
-
-### 💡 Quick Prototype Hack: "The Frustration Meter"
-Add a `frustration` variable to `personality.py`. Every time an error is received within 60 seconds of the last one, increment it. Use this to scale the "Intensity" of the animations sent to Unity.
+## 4. Agentic Actions
+- [ ] **Auto-Browser**: Integrate `embedded-chromium` or similar to let the C++ agent look up API docs and parse the HTML directly.
+- [ ] **Git Blame**: Use `libgit2` (C++ git library) to check who broke the build natively.

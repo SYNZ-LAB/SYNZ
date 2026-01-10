@@ -1,0 +1,15 @@
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/CMakeFiles/synz_core.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/CMakeFiles/INSTALL.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/CMakeFiles/INSTALL.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/CMakeFiles/INSTALL.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/CMakeFiles/ALL_BUILD.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/CMakeFiles/ggml-base.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/CMakeFiles/ggml.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/CMakeFiles/ggml-cpu.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/CMakeFiles/INSTALL.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/ggml-cpu/CMakeFiles/INSTALL.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/CMakeFiles/llama.dir
+C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/CMakeFiles/INSTALL.dir

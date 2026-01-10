@@ -1,0 +1,10 @@
+prefix=C:/Program Files (x86)/SYNZ_Core
+exec_prefix=C:/Program Files (x86)/SYNZ_Core
+libdir=C:/Program Files (x86)/SYNZ_Core/lib
+includedir=C:/Program Files (x86)/SYNZ_Core/include
+
+Name: llama
+Description: Port of Facebook's LLaMA model in C/C++
+Version: 0.0.7699
+Libs: -L${libdir} -lggml -lggml-base -lllama
+Cflags: -I${includedir}

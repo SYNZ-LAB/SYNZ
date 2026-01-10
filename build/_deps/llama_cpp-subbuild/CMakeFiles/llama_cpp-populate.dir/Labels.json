@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/llama_cpp-populate"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7e102b0ebded30e27efafa1a7df1e033/llama_cpp-populate.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/5490d455aca37373bf5e36179aa952c1/llama_cpp-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/CMakeFiles/7b1052e05808877a88c96c02ab93119b/llama_cpp-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"llama_cpp-populate"
+		],
+		"name" : "llama_cpp-populate"
+	}
+}

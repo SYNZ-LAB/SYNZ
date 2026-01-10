@@ -1,0 +1,10 @@
+^C:\USERS\ADMINB\ONEDRIVE\DOCUMENTS\PROJECTS\SYNZ\BUILD\_DEPS\LLAMA_CPP-SUBBUILD\CMAKEFILES\7E102B0EBDED30E27EFAFA1A7DF1E033\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild -BC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/llama_cpp-populate.slnx
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

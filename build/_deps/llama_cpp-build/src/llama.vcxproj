@@ -1,0 +1,540 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{09E9F4E2-AA8D-3AC7-9144-E5BB9335C47D}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>llama</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\bin\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">llama.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">llama</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\bin\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">llama.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">llama</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\bin\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">llama.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">llama</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\bin\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">llama.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">llama</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8 /bigobj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR="Debug";llama_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR=\"Debug\";llama_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\ggml\src\Debug\ggml.lib;..\ggml\src\Debug\ggml-cpu.lib;..\ggml\src\Debug\ggml-base.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/Debug/llama.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/bin/Debug/llama.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8 /bigobj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR="Release";llama_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR=\"Release\";llama_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\ggml\src\Release\ggml.lib;..\ggml\src\Release\ggml-cpu.lib;..\ggml\src\Release\ggml-base.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/Release/llama.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/bin/Release/llama.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8 /bigobj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR="MinSizeRel";llama_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR=\"MinSizeRel\";llama_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\ggml\src\MinSizeRel\ggml.lib;..\ggml\src\MinSizeRel\ggml-cpu.lib;..\ggml\src\MinSizeRel\ggml-base.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/MinSizeRel/llama.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/bin/MinSizeRel/llama.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8 /bigobj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR="RelWithDebInfo";llama_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;LLAMA_BUILD;LLAMA_SHARED;_CRT_SECURE_NO_WARNINGS;GGML_USE_CPU;GGML_SHARED;GGML_BACKEND_SHARED;CMAKE_INTDIR=\"RelWithDebInfo\";llama_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\..\include;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\ggml\src\RelWithDebInfo\ggml.lib;..\ggml\src\RelWithDebInfo\ggml-cpu.lib;..\ggml\src\RelWithDebInfo\ggml-base.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/RelWithDebInfo/llama.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/bin/RelWithDebInfo/llama.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ -BC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build --check-stamp-file C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ -BC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build --check-stamp-file C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ -BC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build --check-stamp-file C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ -BC:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build --check-stamp-file C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\include\llama.h" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama.cpp">
+      <ObjectFileName>$(IntDir)/llama.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-adapter.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-arch.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-batch.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-chat.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-context.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-cparams.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-grammar.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-graph.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-hparams.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-impl.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-io.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-kv-cache.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-kv-cache-iswa.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-memory.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-memory-hybrid.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-memory-recurrent.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-mmap.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-model-loader.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-model-saver.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-model.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-quant.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-sampling.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\llama-vocab.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\unicode-data.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\unicode.cpp" />
+    <ClInclude Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\unicode.h" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\afmoe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\apertus.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\arcee.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\arctic.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\arwkv7.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\baichuan.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\bailingmoe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\bailingmoe2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\bert.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\bitnet.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\bloom.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\chameleon.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\chatglm.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\codeshell.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\cogvlm.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\cohere2-iswa.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\command-r.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\dbrx.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\deci.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\deepseek.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\deepseek2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\dots1.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\dream.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\ernie4-5-moe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\ernie4-5.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone4.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\falcon-h1.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\falcon.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gemma-embedding.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gemma.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gemma2-iswa.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gemma3.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gemma3n-iswa.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\glm4-moe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\glm4.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gpt2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gptneox.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\granite-hybrid.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\granite.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\grok.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\grovemoe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\hunyuan-dense.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\hunyuan-moe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\internlm2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\jais.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\jamba.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\lfm2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\llada-moe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\llada.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\llama-iswa.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\llama.cpp">
+      <ObjectFileName>$(IntDir)/models/llama.cpp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\maincoder.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\mamba.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\mimo2-iswa.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\minicpm3.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\minimax-m2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\modern-bert.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\mpt.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\nemotron-h.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\nemotron.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\neo-bert.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\olmo.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\olmo2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\olmoe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\openai-moe-iswa.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\openelm.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\orion.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\pangu-embedded.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\phi2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\phi3.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\plamo.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\plamo2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\plamo3.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\plm.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen2moe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen2vl.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen3.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen3vl.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen3vl-moe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen3moe.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\qwen3next.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\refact.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\rnd1.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\rwkv6-base.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\rwkv6.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\rwkv6qwen2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\rwkv7-base.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\rwkv7.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\seed-oss.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\smallthinker.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\smollm3.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\stablelm.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\starcoder.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\starcoder2.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\t5-dec.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\t5-enc.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\wavtokenizer-dec.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\xverse.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\mistral3.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\graph-context-mamba.cpp" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\ZERO_CHECK.vcxproj">
+      <Project>{48D8B738-57E5-3EE9-94D9-C166C3E1B13A}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\ggml\src\ggml.vcxproj">
+      <Project>{88BC1B48-3F48-37DF-B6DC-5694CB4C4128}</Project>
+      <Name>ggml</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\ggml\src\ggml-base.vcxproj">
+      <Project>{980D6A42-113F-306D-951B-69919DBBA034}</Project>
+      <Name>ggml-base</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\ggml\src\ggml-cpu.vcxproj">
+      <Project>{6E3CE6E4-9E85-3D6A-8F3F-1B5328C3FE6F}</Project>
+      <Name>ggml-cpu</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

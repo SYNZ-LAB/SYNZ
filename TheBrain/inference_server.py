@@ -80,7 +80,8 @@ def start_server():
     print(f"The Brain is listening on port {WATCHER_PORT}...")
     
     while True:
-        data, addr = recv_sock.recvfrom(1024)
+        # [UPDATE] Increased buffer to 4096 bytes to handle the 5-line context block!
+        data, addr = recv_sock.recvfrom(4096)
         try:
             msg = json.loads(data.decode('utf-8'))
             print(f"Received from Watcher: {msg}")
