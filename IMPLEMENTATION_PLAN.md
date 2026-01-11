@@ -34,6 +34,14 @@ The current task is to implement the **Expert Layer (Qwen)** in C++.
 1.  **Build**: Run `cmake --build . --config Release`.
 2.  **Test**: 
     - Create a dummy `test.log`.
-    - Run `synz_core.exe` pointing to `test.log`.
+    - Run `synz_core.exe` and verify "NeuroLink Waiting" message.
+  - Verify `llama.cpp` loads Qwen model (The Engineer).
+
+## Phase 4: Training "The Face" (Custom SLM)
+> [!NOTE]
+> This is where your GPU is used. We use the C++ Core to RUN the model, but we use Python to TRAIN it.
+-   **Goal**: Create a small, fast model (approx 500M params) that is purely for personality and chatting.
+-   **Tech**: PyTorch + LoRA (Low-Rank Adaptation) or Full Fine-Tune.
+-   **Integration**: After training, we convert it to `.gguf` and load it into SYNZ Core alongside Qwen.
     - Append "NullReferenceException" to `test.log`.
     - Verify that `synz_core` outputs a generated fix/response to the console within 100ms.

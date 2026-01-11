@@ -31,6 +31,7 @@ This document tracks the progress of **SYNZ Core**, a high-performance, local-fi
 ### 👁️ The Sentinel (Native Watcher)
 - [ ] **Filesystem Polling**: `std::filesystem::last_write_time` based watcher.
 - [ ] **Direct Memory Handshake**: Pass string pointers directly to `llama_decode` (Zero Latency).
+- [ ] **Code Sentinel ("Grammarly")**: Monitor `*.cs` files for changes and run background analysis.
 
 ---
 

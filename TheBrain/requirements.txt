@@ -1,4 +1,10 @@
 torch
-numpy
-tqdm
-tokenizers
+transformers
+peft
+bitsandbytes
+accelerate
+datasets
+scipy
+sentencepiece
+protobuf
+trl
