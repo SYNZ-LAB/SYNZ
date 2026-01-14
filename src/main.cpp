@@ -2,6 +2,7 @@
 #include "NeuroLink.h"
 #include "LogMonitor.h"
 #include "CodeMonitor.h"
+#include "UDPServer.h"
 #include <thread>
 
 int main(){
@@ -9,6 +10,7 @@ int main(){
     
     NeuroLink link;
     LlamaEngine brain; 
+    UDPServer udp_bridge(8006); // The Logic Bridge
 
     // Initialize Brain
     std::string model_path = "models/Qwen2.5-Coder-1.5B-Instruct-GGUF.gguf";
@@ -24,6 +26,7 @@ int main(){
 
     std::cout << "[SYNZ] Watching Logs: " << log_path << std::endl;
     std::cout << "[SYNZ] Watching Code: " << code_path << std::endl;
+    std::cout << "[SYNZ] Logic Bridge Open on Port 8006" << std::endl;
 
     while (true) {
         // 1. Check Logs
@@ -49,6 +52,15 @@ int main(){
              std::string prompt = "Review this code for bugs. Be concise.\n" + new_code;
              std::string feedback = brain.infer(prompt);
              link.send_reaction(feedback);
+        }
+
+        // 3. Logic Bridge (The Face's Backend)
+        sockaddr_in sender;
+        std::string logic_req = udp_bridge.receive(sender);
+        if (!logic_req.empty()) {
+             std::cout << "[BRIDGE] Processing: " << logic_req << std::endl;
+             std::string ans = brain.infer(logic_req);
+             udp_bridge.reply(ans, sender);
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

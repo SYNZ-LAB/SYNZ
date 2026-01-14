@@ -23,17 +23,28 @@ print(f"[SYNZ] Training on: {device}")
 
 # --- 1. Load Data ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(script_dir, "personality_data.json")
+# --- 1. Load Data ---
+script_dir = os.path.dirname(os.path.abspath(__file__))
+json_path = os.path.join(script_dir, "personality_data.json")
+txt_path = os.path.join(script_dir, "data", "training_data.txt")
 
-try:
-    with open(data_path, 'r', encoding='utf-8') as f:
-        # Load JSON and extract text
+text = ""
+
+# Priority 1: Raw Text File (Easier for User)
+if os.path.exists(txt_path):
+    print(f"[SYNZ] Loading Raw Text from: {txt_path}")
+    with open(txt_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+# Priority 2: JSON File (Structure)
+elif os.path.exists(json_path):
+    print(f"[SYNZ] Loading JSON from: {json_path}")
+    with open(json_path, 'r', encoding='utf-8') as f:
         raw_data = json.load(f)
-        # Combine all "text" fields into one giant string
-        # Assuming format: [{"text": "Hello"}, {"text": "World"}]
         text = "\n".join([item["text"] for item in raw_data])
-except FileNotFoundError:
-    print("[ERROR] personality_data.json not found! Using dummy text.")
+
+if len(text) < 10:
+    print("[ERROR] Data not found or too short! Using dummy text.")
     text = "Hello SYNZ. I am your Architect. " * 1000
 
 print(f"[SYNZ] Data Loaded. Length: {len(text)} characters")
@@ -75,6 +86,18 @@ model = NanoSYNZ(
 )
 m = model.to(device)
 print(f"[SYNZ] Model Parameters: {sum(p.numel() for p in m.parameters())/1e6:.2f} M")
+
+# [NEW] Load Existing Memory if available
+model_path = os.path.join(script_dir, "synz_face.pth")
+if os.path.exists(model_path):
+    print(f"[SYNZ] Found existing memory: {model_path}")
+    try:
+        model.load_state_dict(torch.load(model_path, map_location=device))
+        print("[SYNZ] Memory Restored. Continuing education...")
+    except Exception as e:
+        print(f"[SYNZ] Memory Corrupted or Mismatched! Starting fresh. ({e})")
+else:
+    print("[SYNZ] No memory found. Born yesterday.")
 
 # --- 5. Optimizer ---
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)

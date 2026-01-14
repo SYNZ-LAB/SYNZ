@@ -20,4 +20,4 @@ FetchContent_MakeAvailable(llama_cpp)
 # Define our app name and source files
 add_executable(synz_core src/main.cpp)
 # Link the llama library so we can use #include "llama.h"
-target_link_libraries(synz_core PRIVATE llama)
+target_link_libraries(synz_core PRIVATE llama ws2_32)
