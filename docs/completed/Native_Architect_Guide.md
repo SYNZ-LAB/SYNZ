@@ -478,3 +478,22 @@ int main() {
 2.  **Add** `LogMonitor` class.
 3.  **Update** `main()` to use `LogMonitor`.
 4.  **Launch Unity** and cause an error!
+
+---
+
+## Part 7: The Voice (Hybrid Architecture)
+
+While the Core (Logic) is C++, the **Face and Voice** run in Python for ease of access to modern AI libraries.
+
+### Architecture
+- **C++ Core**: Sends Logic/Text to Python via UDP (Port 8005).
+- **Python Face**: Receives text -> Rewrites via NanoSYNZ -> Generates Voice via Edge-TTS.
+
+### Audio Pipeline
+The `face_server.py` uses `edge-tts` (Microsoft Edge's free neural voice) to generate an MP3 file.
+1. Text is cleaned (stripped of tags).
+2. `tts_engine.py` requests audio from the cloud.
+3. Audio is saved to `response.mp3`.
+4. Unity (Phase 7 target) reads this file to animate the mouth.
+
+This separation allows us to swap TTS engines (e.g. Kokoro, Index) without recompiling the C++ Core.

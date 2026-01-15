@@ -1,47 +1,42 @@
-# Implementation Plan - Native Embedded Architect (SYNZ Core)
+# SYNZ Phase 7: The Voice of Unity (Audio Integration)
 
-## Goal Description
-Build a **Dual-Model Agentic System**:
-1.  **Interaction Layer**: A custom SLM (trained by us) for personality.
-2.  **Expert Layer**: Qwen 2.5 (C++ Native) for coding support.
-The current task is to implement the **Expert Layer (Qwen)** in C++.
+## 🎯 Objective
+Connect the generated `response.mp3` or raw audio bytes from **face_server.py** to **Unity**, enabling the avatar to speak and sync lips to the audio.
 
-## User Review Required
-> [!IMPORTANT]
-> This is a complete rewrite of the backend. The Python code (`TheBrain/`) is now legacy.
-> You must have `cmake` installed to build the new core.
+## 🏗️ Architecture
+- **Source**: `face_server.py` generates audio (Edge-TTS).
+- **Transport**:
+    - *Option A (File Watcher)*: Unity watches for changes to `response.mp3` and plays it. (Easiest)
+    - *Option B (UDP Stream)*: Python sends audio bytes via UDP to Unity. (Fastest/Real-time)
+- **Receiver**: `NeuroLinkClient.cs` in Unity.
+- **Visuals**: `OVRLipSync` or simple volume-based jaw movement.
 
-## Proposed Changes
+## 📋 Steps
 
-### 1. The Build System
-#### [NEW] [CMakeLists.txt](file:///c:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/CMakeLists.txt)
-- **Dependency Management**: Use `FetchContent` to download and build `llama.cpp` from source.
-- **Configuration**: Enable `LLAMA_CUBLAS` (CUDA) by default for performance.
+### 1. Python Side (Audio Stream)
+- [ ] Research: Best format to send to Unity (WAV bytes vs File Path).
+- [ ] Implement `send_audio_signal(filepath)` in `face_server.py`.
+- [ ] Send custom packet header `[AUDIO]` to Unity via UDP.
 
-### 2. The Source Code
-#### [NEW] [src/main.cpp](file:///c:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/src/main.cpp)
-- **LogMonitor Class**:
-    - Replaces `ReadDirectoryChangesW` with portable `std::filesystem` polling.
-    - Captures "Context" (last 5 lines) into `std::vector<string>`.
-- **LlamaEngine Class**:
-    - Wraps the `llama.h` C API.
-    - Manages `llama_model` (VRAM) and `llama_context` (KV Cache).
-    - `Infer(string)`: Directly tokenizes and processes log data.
+### 2. Unity Side (The Ear)
+- [ ] Update `NeuroLinkClient.cs` to listen for `[AUDIO]` packets.
+- [ ] Implement `AudioLoader`: Coroutine to load `.mp3/.wav` from disk or memory.
+- [ ] Auto-play audio upon receipt.
 
-### 3. Verification Plan
+### 3. Lip Sync (The Mouth)
+- [ ] Add `AudioSource` component to Avatar.
+- [ ] Script a simple "Talk Animation" (Toggle `IsTalking` bool while audio plays).
+- [ ] (Advanced) Analyze spectrum data to drive Blendshapes (A, E, I, O, U).
 
-#### Manual Verification
-1.  **Build**: Run `cmake --build . --config Release`.
-2.  **Test**: 
-    - Create a dummy `test.log`.
-    - Run `synz_core.exe` and verify "NeuroLink Waiting" message.
-  - Verify `llama.cpp` loads Qwen model (The Engineer).
+## 🧪 Verification
+- Start Server & Unity.
+- Type "Sing for me".
+- Verify:
+    1. Audio generates in Python.
+    2. Unity receives signal.
+    3. Avatar plays audio.
+    4. Mouth moves.
 
-## Phase 4: Training "The Face" (Custom SLM)
-> [!NOTE]
-> This is where your GPU is used. We use the C++ Core to RUN the model, but we use Python to TRAIN it.
--   **Goal**: Create a small, fast model (approx 500M params) that is purely for personality and chatting.
--   **Tech**: PyTorch + LoRA (Low-Rank Adaptation) or Full Fine-Tune.
--   **Integration**: After training, we convert it to `.gguf` and load it into SYNZ Core alongside Qwen.
-    - Append "NullReferenceException" to `test.log`.
-    - Verify that `synz_core` outputs a generated fix/response to the console within 100ms.
+## ⚠️ Risks
+- **Latency**: File IO might introduce ~500ms delay.
+- **Locking**: Unity might try to read the file while Python is writing it. (Solution: Use temp names or standard handshake).

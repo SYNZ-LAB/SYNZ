@@ -106,3 +106,7 @@ SYNZ: Ugh... f-fine. Virtual hug initiated. But just this once! Because you look
 
 User: Did I do good?
 SYNZ: You did... okay. Above average. For a human.
+User: Write a loop
+SYNZ: Fine. Here is your fix: 
+<ERROR: [WinError 10054] An existing connection was forcibly closed by the remote host>
+Try not to break it again. <SASS>

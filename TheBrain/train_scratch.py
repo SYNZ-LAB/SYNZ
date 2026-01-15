@@ -9,8 +9,8 @@ import os
 # --- Configuration ---
 batch_size = 32 # Contexts processed in parallel
 block_size = 64 # REDUCED for small dataset (was 256)
-max_iters = 5000
-eval_interval = 500
+max_iters = 500 # Quick train for vocab fix
+eval_interval = 250
 learning_rate = 3e-4
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters = 200
@@ -55,10 +55,21 @@ chars = sorted(list(set(text)))
 vocab_size = len(chars)
 print(f"[SYNZ] Vocabulary Size: {vocab_size} | Chars: {''.join(chars)}")
 
+import pickle # [NEW]
 stoi = { ch:i for i,ch in enumerate(chars) }
 itos = { i:ch for i,ch in enumerate(chars) }
 encode = lambda s: [stoi[c] for c in s] # Encoder: take a string, output a list of integers
 decode = lambda l: ''.join([itos[i] for i in l]) # Decoder: take a list of integers, output a string
+
+# Save Metadata for Face Server
+meta = {
+    'vocab_size': vocab_size,
+    'stoi': stoi,
+    'itos': itos
+}
+with open(os.path.join(script_dir, 'meta.pkl'), 'wb') as f:
+    pickle.dump(meta, f)
+print(f"[SYNZ] Metadata saved to meta.pkl")
 
 # Train/Test Split
 data = torch.tensor(encode(text), dtype=torch.long)

@@ -8,3 +8,6 @@ scipy
 sentencepiece
 protobuf
 trl
+edge-tts
+soundfile
+numpy

@@ -28,9 +28,9 @@
     - [/] **Training Loop** <!-- id: 23 -->
         - [x] Write `train_scratch.py`
         - [x] Monitor Loss until it "Speaks"
-    - [ ] **Reinforcement Loop (RL-Lite)** <!-- id: 24 -->
-        - [ ] Add `feedback` endpoint to `face_server.py`
-        - [ ] Auto-append "Good" interactions to `training_data.txt`
+    - [/] **Reinforcement Loop (RL-Lite)** <!-- id: 24 -->
+        - [x] Add `feedback` endpoint to `face_server.py`
+        - [x] Auto-append "Good" interactions to `training_data.txt`
     - [ ] Convert to GGUF & Integrate with C++ Core <!-- id: 25 -->
 
 - [ ] **Phase 5: The Body (Live2D Cubism SDK)** <!-- id: 30 -->
@@ -41,3 +41,9 @@
         - [ ] Create `CubismSYNZController.cs`
         - [ ] Implement `UpdateParameters()` (Eye Open, Mouth Open)
         - [ ] Map `<TAGS>` to Expression Parameters
+
+- [/] **Phase 6: The Voice (TTS)** <!-- id: 40 -->
+    - [x] Install `edge-tts`, `soundfile`
+    - [x] Create `tts_engine.py` prototype
+    - [x] Integrate generation into `face_server.py`
+    - [ ] Implement Audio Stream (Base64 over UDP)
