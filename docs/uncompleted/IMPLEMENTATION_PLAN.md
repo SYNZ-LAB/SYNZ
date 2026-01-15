@@ -28,8 +28,16 @@ Connect the generated `response.mp3` or raw audio bytes from **face_server.py** 
 - [ ] Script a simple "Talk Animation" (Toggle `IsTalking` bool while audio plays).
 - [ ] (Advanced) Analyze spectrum data to drive Blendshapes (A, E, I, O, U).
 
+### 4. The Ear (Speech-to-Text) [NEW]
+- [ ] **Unity**: Capture Microphone input.
+- [ ] **Unity**: Stream raw PCM audio to Python (Port 8007?).
+- [ ] **Python**: Implement `stt_engine.py` (using `faster-whisper` or `speech_recognition`).
+- [ ] **Python**: Transcribe Audio -> Inject into `face_server.py` as user text.
+
 ## 🧪 Verification
 - Start Server & Unity.
+- Speak "Hello".
+- Verify: Unity sends audio -> Python transcribes "Hello" -> Brain replies.
 - Type "Sing for me".
 - Verify:
     1. Audio generates in Python.
