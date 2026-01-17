@@ -190,16 +190,33 @@ while True:
 
         # --- 4. TTS Generation (Voice) ---
         print(f"[THE SELF] Vocalizing: '{response}'")
+        audio_ready = False
         try:
             # Clean tags if any (e.g. <SASS>)
             clean_text = re.sub(r'<[^>]*>', '', response).strip()
-            tts_engine.generate_audio_sync(clean_text, "response.mp3")
+            # Use ABSOLUTE path for Unity to find it easily
+            # (Unity project handles absolute paths better than relative if CWD differs)
+            audio_path = os.path.join(script_dir, "..", "response.mp3") 
+            audio_path = os.path.abspath(audio_path)
+            
+            success = tts_engine.generate_audio_sync(clean_text, audio_path)
+            if success:
+                audio_ready = True
         except Exception as e:
             print(f"[WARN] Voice Generation Failed: {e}")
 
         # 3. Send back to whoever asked (Likely C++ wrapper or Unity)
+        # Send Text Response (Text Bubble)
         print(f"[REPLY]: {response}")
         sock.sendto(response.encode('utf-8'), addr)
+        
+        # Send Audio Signal (The Mouth)
+        if audio_ready:
+            # We send a specific header so Unity knows it's an event, not text
+            # Format: [AUDIO] <AbsPath>
+            signal = f"[AUDIO] {audio_path}"
+            sock.sendto(signal.encode('utf-8'), addr)
+            print(f"[SIGNAL] Sent Voice Command to {addr}")
 
     except KeyboardInterrupt:
         print("\n[THE SELF] Shutting down gracefully... Bye!")
