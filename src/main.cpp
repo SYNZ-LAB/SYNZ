@@ -14,7 +14,8 @@ int main(){
     UDPServer udp_bridge(8006); // The Logic Bridge
 
     // Initialize Brain
-    std::string model_path = "models/Qwen2.5-Coder-1.5B-Instruct-GGUF.gguf";
+    // Initialize Brain (Llama 3 8B - GPU Mode)
+    std::string model_path = "models/Llama-3.1-8B-Instruct-Q6_K.gguf";
     brain.load_model(model_path); 
 
     // Initialize Eyes (Log Watcher)

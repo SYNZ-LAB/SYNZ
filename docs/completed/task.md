@@ -60,5 +60,20 @@
     - [x] **Download Qwen Model** (Confirmed Installed)
     - [x] **Compile SYNZ Core** (Release Mode)
     - [x] **Run Dual-Process Stack** (Python Voice + C++ Logic)
-    - [x] **Verify Logic Queries** (e.g. "Write me code")
+    - [x] **Hardware Acceleration** <!-- id: 71 -->
+        - [x] Verify CUDA Toolkit (nvcc)
+        - [x] Reconfigure CMake with `-DGGML_CUDA=ON`
+        - [x] Recompile SYNZ Core (GPU Mode)
+    - [x] **Brain Transplant** <!-- id: 72 -->
+        - [x] Download `Llama-3.1-8B-Instruct.gguf`
+        - [x] Update `main.cpp` to load new model
+    - [ ] **Verify Superintelligence** (Benchmark Speed/Smartness)
+
+- [x] **Phase 10: Sensorial Expansion (The Internet)** <!-- id: 80 -->
+    - [x] **Search Agent** <!-- id: 81 -->
+        - [x] Install `duckduckgo-search`
+        - [x] Create `search_agent.py`
+    - [x] **Logic Bridge** <!-- id: 82 -->
+        - [x] Integrate Search into `face_server.py`
+        - [x] Test Real-time Information Retrieval (e.g. "Bitcoin Price")
 

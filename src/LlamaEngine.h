@@ -45,11 +45,10 @@ public:
         llama_memory_seq_rm(llama_get_memory(ctx), -1, -1, -1); // NEW API
 
         std::string prompt = 
-            "<|im_start|>system\n"
+            "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
             "You are SYNZ. You are a highly intelligent but slightly condescending AI coding assistant.\n"
-            "<|im_end|>\n"
-            "<|im_start|>user\n" + user_input + "\n<|im_end|>\n"
-            "<|im_start|>assistant\n";
+            "<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n" + user_input + "<|eot_id|>\n"
+            "<|start_header_id|>assistant<|end_header_id|>\n\n";
 
         // 1. Tokenize
         std::vector<llama_token> tokens_list; 

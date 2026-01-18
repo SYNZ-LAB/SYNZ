@@ -6,6 +6,7 @@
 		"C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/cmake_install.cmake",
 		"C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/cmake_install.cmake",
 		"C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/ggml-cpu/cmake_install.cmake",
+		"C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/ggml/src/ggml-cuda/cmake_install.cmake",
 		"C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-build/src/cmake_install.cmake"
 	],
 	"Parallel" : false

@@ -18,7 +18,7 @@ file(MAKE_DIRECTORY
   "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/llama_cpp-populate-prefix/src/llama_cpp-populate-stamp"
 )
 
-set(configSubDirs Debug)
+set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
     file(MAKE_DIRECTORY "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-subbuild/llama_cpp-populate-prefix/src/llama_cpp-populate-stamp/${subDir}")
 endforeach()

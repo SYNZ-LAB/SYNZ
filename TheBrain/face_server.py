@@ -6,6 +6,7 @@ from model import NanoSYNZ
 import torch
 import os
 import tts_engine # [NEW] Voice Module
+from search_agent import SearchAgent # [NEW] The Internet Eyes
 
 # --- Configuration ---
 # The Face (Me)
@@ -62,6 +63,11 @@ except Exception as e:
 
 model.to(device)
 model.eval()
+
+# 1.5 Initialize Search Agent
+print("[THE SELF] Connecting to the Global Network...")
+searcher = SearchAgent()
+
 
 # 2. Setup UDP Socket (The Ear)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -176,16 +182,29 @@ while True:
         # --- THE ROUTER ---
         # 1. Is this a logic question?
         is_code = False
-        triggers = ["code", "function", "fix", "loop", "compile", "error", "bug", "implement", "count", "write", "who", "what is"]
-        if any(t in user_msg.lower() for t in triggers):
+        triggers = ["code", "function", "fix", "loop", "compile", "error", "bug", "implement", "count", "write", "who", "what", "how"]
+        search_triggers = ["price", "news", "weather", "when", "who is", "what is", "search", "google", "find"]
+        
+        needs_search = any(t in user_msg.lower() for t in search_triggers)
+        if any(t in user_msg.lower() for t in triggers) or needs_search:
             is_code = True
 
         response = ""
 
         if is_code:
             # A. Delegate to C++ Core
-            print("[THE SELF] Ugh, code. Delegating to Core...")
-            logic_reply = query_logic_brain(user_msg)
+            print("[THE SELF] Offloading to Core...")
+            
+            # [NEW] Check Web First
+            context_data = ""
+            if needs_search:
+                 print("[THE SELF] Searching the web first...")
+                 web_data = searcher.search(user_msg)
+                 if web_data:
+                      context_data = f"\n[SYSTEM_NOTE: Real-time search data]\n{web_data}\n"
+            
+            final_query = context_data + user_msg
+            logic_reply = query_logic_brain(final_query)
             
             # B. Wrap it in Personality
             # (In the future, we feed 'logic_reply' into NanoSYNZ to rewrite it)
