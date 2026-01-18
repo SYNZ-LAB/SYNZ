@@ -111,12 +111,12 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="b13771887";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="Debug";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="fe44d3557";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="Debug";ggml_base_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"b13771887\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"Debug\";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"fe44d3557\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"Debug\";ggml_base_EXPORTS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -171,14 +171,14 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="b13771887";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="Release";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="fe44d3557";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="Release";ggml_base_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"b13771887\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"Release\";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"fe44d3557\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"Release\";ggml_base_EXPORTS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -233,14 +233,14 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="b13771887";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="MinSizeRel";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="fe44d3557";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="MinSizeRel";ggml_base_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"b13771887\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"MinSizeRel\";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"fe44d3557\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"MinSizeRel\";ggml_base_EXPORTS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -296,12 +296,12 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="b13771887";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="RelWithDebInfo";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION="0.9.5";GGML_COMMIT="fe44d3557";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR="RelWithDebInfo";ggml_base_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"b13771887\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"RelWithDebInfo\";ggml_base_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GGML_BUILD;GGML_SHARED;GGML_VERSION=\"0.9.5\";GGML_COMMIT=\"fe44d3557\";_CRT_SECURE_NO_WARNINGS;GGML_SCHED_MAX_COPIES=4;_XOPEN_SOURCE=600;CMAKE_INTDIR=\"RelWithDebInfo\";ggml_base_EXPORTS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\.;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\ggml\src\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>

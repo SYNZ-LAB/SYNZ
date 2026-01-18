@@ -46,5 +46,26 @@ Connect the generated `response.mp3` or raw audio bytes from **face_server.py** 
     4. Mouth moves.
 
 ## ⚠️ Risks
-- **Latency**: File IO might introduce ~500ms delay.
 - **Locking**: Unity might try to read the file while Python is writing it. (Solution: Use temp names or standard handshake).
+
+# SYNZ Phase 8: Awakening the Logic Core (C++ Integration)
+
+## 🎯 Objective
+Compile and run the `synz_core` executable to handle logic/code questions, while maintaining the Python Face for personality and voice.
+
+## 📋 Steps
+
+### 1. Model Setup
+- [x] Verify `Qwen2.5-Coder-1.5B-Instruct-GGUF.gguf` is in `models/`.
+
+### 2. Compilation (Build System)
+- [ ] Run `cmake --build . --config Release` to generate `synz_core.exe`.
+
+### 3. Dual-Process Launch
+- [ ] Terminal A: Run `synz_core.exe` (Port 8006).
+- [ ] Terminal B: Run `face_server.py` (Port 8005).
+
+### 4. Verification
+- Type: "Write a python script to count to 10".
+- Flow: `Face` -> (UDP) -> `Core` -> (UDP) -> `Face` -> `User`.
+

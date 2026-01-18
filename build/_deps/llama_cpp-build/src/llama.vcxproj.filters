@@ -160,6 +160,9 @@
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone-moe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\falcon-h1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

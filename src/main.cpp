@@ -1,3 +1,4 @@
+#define WIN32_LEAN_AND_MEAN
 #include "LlamaEngine.h"
 #include "NeuroLink.h"
 #include "LogMonitor.h"

@@ -617,7 +617,7 @@ GGML_ZDNN:BOOL=OFF
 GGML_ZENDNN:BOOL=OFF
 
 //Path to a program.
-GIT_EXE:FILEPATH=GIT_EXE-NOTFOUND
+GIT_EXE:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
 //Git command line client
 GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
@@ -652,8 +652,7 @@ LLAMA_CURL:BOOL=ON
 //llama: enable -Werror flag
 LLAMA_FATAL_WARNINGS:BOOL=OFF
 
-//llama: if libcurl is disabled, use httplib to download model
-// from an URL
+//llama: httplib for downloading functionality
 LLAMA_HTTPLIB:BOOL=ON
 
 //Location of header  files

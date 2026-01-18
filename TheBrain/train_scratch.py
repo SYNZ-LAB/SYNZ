@@ -33,7 +33,7 @@ text = ""
 # Priority 1: Raw Text File (Easier for User)
 if os.path.exists(txt_path):
     print(f"[SYNZ] Loading Raw Text from: {txt_path}")
-    with open(txt_path, 'r', encoding='utf-8') as f:
+    with open(txt_path, 'r', encoding='utf  -8') as f:
         text = f.read()
 
 # Priority 2: JSON File (Structure)

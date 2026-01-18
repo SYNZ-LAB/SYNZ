@@ -434,6 +434,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\ernie4-5.cpp" />
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone.cpp" />
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone4.cpp" />
+    <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone-moe.cpp" />
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\falcon-h1.cpp" />
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\falcon.cpp" />
     <ClCompile Include="C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gemma-embedding.cpp" />

@@ -25,15 +25,34 @@ def chat_loop():
             # Send
             sock.sendto(user_input.encode('utf-8'), (HOST_IP, HOST_PORT))
 
-            # Receive
-            data, addr = sock.recvfrom(4096)
-            reply = data.decode('utf-8')
+            # Receive Loop (Drain all packets: Text + Audio Signal)
+            start_time = time.time()
+            text_received = False
             
-            print(f"[SYNZ]: {reply}")
-            
-            # Since we know the server generates a file, we can mention it
-            if "response.mp3" in reply or True: # Always mentioning for now
-                print("       (Audio file updated: response.mp3)")
+            while True:
+                try:
+                    # First packet waits long (processing time), subsequent ones wait short (drain)
+                    timeout = 15.0 if not text_received else 0.5 
+                    sock.settimeout(timeout)
+                    
+                    data, addr = sock.recvfrom(4096)
+                    reply = data.decode('utf-8')
+                    
+                    if "[AUDIO]" in reply:
+                        # This is the "Mouth" signal intended for Unity
+                        print(f"       (Audio Signal Received: {reply.split(' ')[-1]})")
+                    elif reply.strip():
+                        # This is the "Text" response
+                        print(f"[SYNZ]: {reply}")
+                        text_received = True
+                        
+                except socket.timeout:
+                    if text_received:
+                        break # We got the text and waited for audio/extras, now done.
+                    else:
+                        # Timeout before getting ANY text
+                        print("[SYSTEM] No response. (Is the server running?)")
+                        break
 
         except KeyboardInterrupt:
             print("\n[SYSTEM] Uplink closed. Bye.")

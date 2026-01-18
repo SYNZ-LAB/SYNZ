@@ -143,6 +143,10 @@ def handle_feedback(user_msg):
          return "[SYSTEM] Memory Discarded. I'll do better next time... baka."
     return None
 
+    return None
+
+UNITY_ADDR = None
+
 while True:
     try:
         try:
@@ -155,6 +159,13 @@ while True:
         user_msg = data.decode('utf-8')
         print(f"[USER SAYS]: {user_msg}")
 
+        # [NEW] Detect Body (Unity)
+        if "Unity Connected" in user_msg:
+             UNITY_ADDR = addr
+             print(f"[SYSTEM] Body Connected at {addr}")
+             sock.sendto(b"ACK", addr) # Acknowledge
+             continue
+
         # --- 0. Check Feedback ---
         feedback_reply = handle_feedback(user_msg)
         if feedback_reply:
@@ -165,7 +176,7 @@ while True:
         # --- THE ROUTER ---
         # 1. Is this a logic question?
         is_code = False
-        triggers = ["code", "function", "fix", "loop", "compile", "error", "bug", "implement"]
+        triggers = ["code", "function", "fix", "loop", "compile", "error", "bug", "implement", "count", "write", "who", "what is"]
         if any(t in user_msg.lower() for t in triggers):
             is_code = True
 
@@ -217,6 +228,11 @@ while True:
             signal = f"[AUDIO] {audio_path}"
             sock.sendto(signal.encode('utf-8'), addr)
             print(f"[SIGNAL] Sent Voice Command to {addr}")
+            
+            # [NEW] Also send to Unity Body if known
+            if UNITY_ADDR and UNITY_ADDR != addr:
+                sock.sendto(signal.encode('utf-8'), UNITY_ADDR)
+                print(f"[SIGNAL] Broadcasted Voice to Body at {UNITY_ADDR}")
 
     except KeyboardInterrupt:
         print("\n[THE SELF] Shutting down gracefully... Bye!")

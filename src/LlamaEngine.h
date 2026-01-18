@@ -38,6 +38,11 @@ public:
 
     std::string infer(const std::string& user_input) {
         if (!model || !ctx || !vocab) return "Error: Brain not initialized.";
+        
+        // Critical Fix: Clear Previous Thoughts (Reset KV Cache)
+        // Critical Fix: Clear Previous Thoughts (Reset KV Cache)
+        // llama_kv_cache_seq_rm(ctx, -1, -1, -1); // OLD API
+        llama_memory_seq_rm(llama_get_memory(ctx), -1, -1, -1); // NEW API
 
         std::string prompt = 
             "<|im_start|>system\n"

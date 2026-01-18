@@ -1,0 +1,11 @@
+build/
+venv/
+models/
+__pycache__/
+*.pyc
+*.wav
+*.mp3
+.vs/
+.vscode/
+*.user
+*.log

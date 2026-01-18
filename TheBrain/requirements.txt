@@ -11,3 +11,6 @@ trl
 edge-tts
 soundfile
 numpy
+SpeechRecognition
+pyaudio
+openai-whisper

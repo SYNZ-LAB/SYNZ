@@ -51,6 +51,7 @@ C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\m
 C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\ernie4-5.cpp;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\llama.dir\Release\ernie4-5.obj
 C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone.cpp;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\llama.dir\Release\exaone.obj
 C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone4.cpp;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\llama.dir\Release\exaone4.obj
+C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\exaone-moe.cpp;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\llama.dir\Release\exaone-moe.obj
 C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\falcon-h1.cpp;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\llama.dir\Release\falcon-h1.obj
 C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\falcon.cpp;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\llama.dir\Release\falcon.obj
 C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-src\src\models\gemma-embedding.cpp;C:\Users\Adminb\OneDrive\Documents\Projects\SYNZ\build\_deps\llama_cpp-build\src\llama.dir\Release\gemma-embedding.obj

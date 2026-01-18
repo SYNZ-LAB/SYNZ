@@ -46,4 +46,19 @@
     - [x] Install `edge-tts`, `soundfile`
     - [x] Create `tts_engine.py` prototype
     - [x] Integrate generation into `face_server.py`
-    - [ ] Implement Audio Stream (Base64 over UDP)
+    - [x] Implement Audio Stream (File Path Signal via UDP)
+
+- [/] **Phase 7: The Senses (Audio Integration)** <!-- id: 50 -->
+    - [x] **Unity Earcup** (FaceBridge.cs)
+    - [x] **Unity Mouth** (SimpleAudioPlayer.cs)
+    - [ ] **Verify Audio Playback**
+    - [ ] **Implement Lip Sync** (Volume or OVRLipSync)
+    - [/] **Implement Speech-to-Text** (The Ears)
+
+- [ ] **Phase 8: Connecting the Brain (C++ Core Integration)** <!-- id: 60 -->
+    - [x] Create `Knowledge_Core_Guide.md`
+    - [x] **Download Qwen Model** (Confirmed Installed)
+    - [x] **Compile SYNZ Core** (Release Mode)
+    - [x] **Run Dual-Process Stack** (Python Voice + C++ Logic)
+    - [x] **Verify Logic Queries** (e.g. "Write me code")
+
