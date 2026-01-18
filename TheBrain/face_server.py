@@ -64,9 +64,11 @@ except Exception as e:
 model.to(device)
 model.eval()
 
-# 1.5 Initialize Search Agent
+# 1.5 Initialize Search & Memory
 print("[THE SELF] Connecting to the Global Network...")
 searcher = SearchAgent()
+from memory_agent import MemoryAgent # [NEW] The Hippocampus
+brain = MemoryAgent() # Initialize DB (takes a second to load models)
 
 
 # 2. Setup UDP Socket (The Ear)
@@ -180,43 +182,44 @@ while True:
              continue # Skip normal processing
 
         # --- THE ROUTER ---
-        # 1. Is this a logic question?
-        is_code = False
-        triggers = ["code", "function", "fix", "loop", "compile", "error", "bug", "implement", "count", "write", "who", "what", "how"]
-        search_triggers = ["price", "news", "weather", "when", "who is", "what is", "search", "google", "find"]
+        # [PHASE 9 UPDATE]: "God Mode" enabled. All traffic goes to Core (Llama 3).
+        # We process Search Intent first.
         
+        search_triggers = ["price", "news", "weather", "when", "who is", "what is", "search", "google", "find"]
         needs_search = any(t in user_msg.lower() for t in search_triggers)
-        if any(t in user_msg.lower() for t in triggers) or needs_search:
-            is_code = True
 
-        response = ""
+        context_data = ""
+        
+        # [NEW] Check Memory (The Hippocampus)
+        memories = brain.recall(user_msg)
+        if memories:
+             context_data += f"\n{memories}\n"
 
-        if is_code:
-            # A. Delegate to C++ Core
-            print("[THE SELF] Offloading to Core...")
-            
-            # [NEW] Check Web First
-            context_data = ""
-            if needs_search:
-                 print("[THE SELF] Searching the web first...")
-                 web_data = searcher.search(user_msg)
-                 if web_data:
-                      context_data = f"\n[SYSTEM_NOTE: Real-time search data]\n{web_data}\n"
-            
-            final_query = context_data + user_msg
-            logic_reply = query_logic_brain(final_query)
-            
-            # B. Wrap it in Personality
-            # (In the future, we feed 'logic_reply' into NanoSYNZ to rewrite it)
-            response = f"Fine. Here is your fix: \n{logic_reply}\nTry not to break it again. <SASS>"
+        if needs_search:
+                print("[THE SELF] Searching the web first...")
+                web_data = searcher.search(user_msg)
+                if web_data:
+                    context_data = f"\n[SYSTEM_NOTE: Real-time search data]\n{web_data}\n"
+        
+        # Send everything to Llama-3
+        final_query = context_data + user_msg
+        
+        print("[THE SELF] Sending to Core...")
+        logic_reply = query_logic_brain(final_query)
+        
+        # Fallback if Core is offline
+        if "<ERROR" in logic_reply:
+             response = f"My brain is offline. ({logic_reply})"
         else:
-            # A. Just Chat
-            print("[THE SELF] Just chatting.")
-            response = generate_sass(user_msg)
+             response = logic_reply
 
         # --- Update Memory ---
         last_user_input = user_msg
         last_ai_response = response
+        
+        # [NEW] Consolidate to Long-Term Memory
+        # We save the pair: "User: ... SYNZ: ..."
+        brain.remember(f"User: {user_msg}\nSYNZ: {response}")
 
         # --- 4. TTS Generation (Voice) ---
         print(f"[THE SELF] Vocalizing: '{response}'")

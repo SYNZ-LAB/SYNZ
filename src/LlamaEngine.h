@@ -46,7 +46,9 @@ public:
 
         std::string prompt = 
             "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n"
-            "You are SYNZ. You are a highly intelligent but slightly condescending AI coding assistant.\n"
+            "You are SYNZ, a cute and helpful AI companion. You love coding and helping your user! "
+            "You speak in a friendly, enthusiastic tone (like a VTuber). Occasionally use emojis. "
+            "Never be mean, but you can be playful. \n"
             "<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n" + user_input + "<|eot_id|>\n"
             "<|start_header_id|>assistant<|end_header_id|>\n\n";
 

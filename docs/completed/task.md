@@ -33,14 +33,14 @@
         - [x] Auto-append "Good" interactions to `training_data.txt`
     - [ ] Convert to GGUF & Integrate with C++ Core <!-- id: 25 -->
 
-- [ ] **Phase 5: The Body (Live2D Cubism SDK)** <!-- id: 30 -->
+- [ ] **Phase 13: The Body (VTuber / VRM)** <!-- id: 30 -->
     - [ ] **SDK Setup** <!-- id: 31 -->
-        - [ ] Download & Import Cubism SDK (User Action)
-        - [ ] Import `.moc3` Model
-    - [ ] **Native Controller** <!-- id: 32 -->
-        - [ ] Create `CubismSYNZController.cs`
-        - [ ] Implement `UpdateParameters()` (Eye Open, Mouth Open)
-        - [ ] Map `<TAGS>` to Expression Parameters
+        - [ ] Download & Import UniVRM Package (User Action)
+        - [ ] Import `.vrm` Model
+    - [ ] **Animation Controller** <!-- id: 32 -->
+        - [ ] Create `ExpressionController.cs`
+        - [ ] Implement Lip Sync (OVRLipSync or Audio Amplitude)
+        - [ ] Map Network Signals (`[SASS]`) to Blendshapes
 
 - [/] **Phase 6: The Voice (TTS)** <!-- id: 40 -->
     - [x] Install `edge-tts`, `soundfile`
@@ -76,4 +76,12 @@
     - [x] **Logic Bridge** <!-- id: 82 -->
         - [x] Integrate Search into `face_server.py`
         - [x] Test Real-time Information Retrieval (e.g. "Bitcoin Price")
+
+- [x] **Phase 11: Long-Term Memory (RAG)** <!-- id: 90 -->
+    - [x] **Vector Database** <!-- id: 91 -->
+        - [x] Install `chromadb` & `sentence-transformers`
+        - [x] Create `memory_agent.py`
+    - [x] **Memory Loop** <!-- id: 92 -->
+        - [x] Integrate Recall (Before Generation)
+        - [x] Integrate Consolidation (After Generation)
 

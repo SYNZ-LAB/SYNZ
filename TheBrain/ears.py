@@ -19,6 +19,7 @@ model = whisper.load_model("tiny") # Switched from 'base' to 'tiny'
 print("[EARS] Model Loaded. Listening...")
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind(('0.0.0.0', 0)) # Bind to ephemeral port to receive replies
 sock.setblocking(False) # Enable non-blocking mode for listening
 
 audio_queue = queue.Queue()
