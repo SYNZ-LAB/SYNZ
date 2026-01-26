@@ -33,6 +33,22 @@
         - [x] Auto-append "Good" interactions to `training_data.txt`
     - [ ] Convert to GGUF & Integrate with C++ Core <!-- id: 25 -->
 
+- [ ] **Phase 12: The Eyes (Vision)** <!-- id: 100 -->
+    - [ ] **VLM Integration** <!-- id: 101 -->
+        - [ ] Install `transformers` `pillow` `mss`
+        - [ ] Create `vision_server.py` (Moondream2 / Llava)
+    - [ ] **Sight Loop** <!-- id: 102 -->
+        - [ ] Implement Screenshot mechanism
+        - [ ] Implement "Describe Screen" trigger
+
+- [ ] **Phase 14: Agency (Humanization)** <!-- id: 120 -->
+    - [ ] **Emotional Core** <!-- id: 121 -->
+        - [ ] Create `mood.json` (Happiness/Energy)
+        - [ ] Implement Decay/Boost Logic
+    - [ ] **Proactive Loop** <!-- id: 122 -->
+        - [ ] Monitor Silence Duration
+        - [ ] Trigger Self-Initiated Chat
+
 - [ ] **Phase 13: The Body (VTuber / VRM)** <!-- id: 30 -->
     - [ ] **SDK Setup** <!-- id: 31 -->
         - [ ] Download & Import UniVRM Package (User Action)
@@ -41,6 +57,13 @@
         - [ ] Create `ExpressionController.cs`
         - [ ] Implement Lip Sync (OVRLipSync or Audio Amplitude)
         - [ ] Map Network Signals (`[SASS]`) to Blendshapes
+
+- [ ] **Phase 15: The Hands (Agentic Coding)** <!-- id: 130 -->
+    - [ ] **Editor Agent** <!-- id: 131 -->
+        - [ ] Create `editor_agent.py` (Safe File I/O)
+        - [ ] Implement Backup/Rollback Logic
+    - [ ] **Integration** <!-- id: 132 -->
+        - [ ] Enable `!edit` command in `face_server.py`
 
 - [/] **Phase 6: The Voice (TTS)** <!-- id: 40 -->
     - [x] Install `edge-tts`, `soundfile`
