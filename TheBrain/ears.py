@@ -98,20 +98,34 @@ def main_loop():
 
             time.sleep(0.01)
 
+# --- Wake Word Config ---
+WAKE_WORDS = ["SYNZ", "SINS", "SINNS", "SINCE", "SENDS", "XINS", "SCENES"] # Common Whisper misinterpretations
+AWAKE_DURATION = 30.0 # How long to stay awake after last interaction
+
+is_awake = False
+last_interaction_time = 0
+
 def process_audio():
     """Concatenates buffer and runs Whisper."""
+    global is_awake, last_interaction_time
+    
     if not recording_buffer:
         return
 
-    print("\n[EARS] Digitizing sequence...         ")
+    # Check Sleep Timeout
+    if is_awake and (time.time() - last_interaction_time > AWAKE_DURATION):
+        print(f"\n[EARS] Timeout ({AWAKE_DURATION}s). Going back to sleep. zzz...")
+        is_awake = False
+
+    status_icon = "🟢" if is_awake else "🔴"
+    print(f"\n[EARS] Digitizing sequence... {status_icon}        ")
 
     # Flatten buffer
     audio_data = np.concatenate(recording_buffer, axis=0).flatten()
     
     # Save DEBUG File
-    wav.write("debug_last_heard.wav", SAMPLE_RATE, (audio_data * 32767).astype(np.int16))
-    print("[EARS] Saved 'debug_last_heard.wav'")
-
+    # wav.write("debug_last_heard.wav", SAMPLE_RATE, (audio_data * 32767).astype(np.int16))
+    
     audio_data = audio_data.astype(np.float32)
     
     # Transcribe
@@ -120,7 +134,24 @@ def process_audio():
         text = result["text"].strip()
         
         if text:
+            upper_text = text.upper()
+            
+            # WAKE WORD CHECK
+            if not is_awake:
+                detected = any(w in upper_text for w in WAKE_WORDS)
+                if detected:
+                    print(f"[WAKE] Waking up! Heard: '{text}'")
+                    is_awake = True
+                    last_interaction_time = time.time()
+                    # We pass the wake phrase through so she can respond to "Hey SYNZ what time is it"
+                else:
+                    print(f"[SLEEPING] Ignored: '{text}' (Say 'SYNZ' to wake)")
+                    return # Ignore this input
+
+            # If we are here, we are AWAKE
             print(f"[HEARD]: {text}")
+            last_interaction_time = time.time() # Reset timer
+            
             # Send to Face Server
             sock.sendto(text.encode('utf-8'), (HOST_IP, HOST_PORT))
         else:
