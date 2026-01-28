@@ -1,82 +1,63 @@
-# Project SYNZ (SYNZ Core)
+# SYNZ: Digital Human Agent
 
-# SYNZ: The Dual-Brain Agent 🧠🤖
-
-SYNZ is a local-first, agentic co-worker for Unity Developers.
-It uses a **Hybrid Architecture** to combine raw coding power with a custom personality.
-
-## The Architecture
-1.  **SYNZ Core (Left Brain)**:
-    *   **Engine**: C++ Native (`synz_core.exe`)
-    *   **Model**: Qwen 2.5-Coder (1.5B/7B)
-    *   **Role**: Logic, Coding, Error Fixing.
-2.  **SYNZ Face (Right Brain)**:
-    *   **Engine**: Python Custom Transformer (`NanoSYNZ`)
-    *   **Model**: Trained from scratch on your chat logs.
-    *   **Role**: Personality, Chat, VTuber Control.
-
-## Quick Start
-
-### 1. The Core (Logic)
-```powershell
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-.\Release\synz_core.exe
-```
-
-### 2. The Face (Personality)
-```powershell
-# Install Restrictions: Python 3.12 Recommended (3.14 works on CPU only)
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install torch
-python TheBrain/train_scratch.py
-```
+An agentic AI that can see, hear, speak, and write code.
 
 ## Prerequisites
 
-- **CMake** (3.14+)
-- **C++ Compiler** (MSVC / GCC / Clang) supporting C++17.
-- **CUDA Toolkit** (Optional, for NVIDIA GPU acceleration).
+1.  **Python 3.10+** (Ensure it is added to PATH).
+2.  **Unity 2022.3+** (For the visual body).
+3.  **Live2D Cubism SDK** (Unity Package).
+4.  **Hardware:** NVIDIA GPU recommended for Llama-3 inference.
 
-## Building "SYNZ Core"
+## Installation
 
-This project uses `CMake` to manage dependencies (like `llama.cpp`) automatically.
+1.  **Run Installer:**
+    Double-click `setup_synz.bat` in the root directory.
+    This script will:
+    - Create a Python virtual environment (venv).
+    - Install all required Python dependencies (PyTorch, Transformers, Whisper, etc.).
+    - Configure the project for local execution.
 
-```bash
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-```
+    *Note: The C++ build step has been disabled in favor of a Python-based Logic Core to ensure compatibility across different Windows environments.*
 
-## Setup
+2.  **Unity Setup:**
+    - Open the `unity_scripts` folder.
+    - Copy all `.cs` files into your Unity Project's `Assets` folder.
+    - Create an Empty GameObject in your scene named "Setup".
+    - Attach the `SYNZ_Bootstrap.cs` script to this object.
+    - Ensure your Live2D model is in the scene.
+    - Press Play to verify the "SYNZ_NeuroLink" connection.
 
-1.  Download a GGUF model (e.g., `DeepSeek-Coder-V2-Lite-Instruct.Q4_K_M.gguf`) to the `models/` folder.
-2.  Edit `src/main.cpp` to point to your target log file.
-3.  Run `synz_core.exe`.
+## How to Run
 
-## 🤝 Team Workflow
+1.  **Start the Brain:**
+    Double-click `start_synz.bat`.
+    This will open three terminal windows:
+    - **Core:** The Logic Engine (Llama-3).
+    - **Face:** The Personality & Tool Router.
+    - **Ears:** The Microphone Listener (Whisper).
 
-SYNZ uses a **Hybrid Architecture** to separate *Training* from *Inference*.
+    Wait until the Face window displays "Personality Loaded" and the Brain window displays "Model Online".
 
-### 🔵 For Data Scientists (Python)
-*   **Where**: `TheBrain/` folder.
-*   **Role**: "Train the Mind".
-*   **Tasks**:
-    *   Fine-tune `.gguf` models using `Unsloth` / PyTorch.
-    *   Process documentation datasets.
-    *   **Goal**: Output better `.gguf` files for the Core team.
+2.  **Start the Body:**
+    Run your Unity Scene (Editor Play Mode or Built Executable).
+    The Agent is now fully active.
 
-### 🟢 For Systems Engineers (C++)
-*   **Where**: `src/` folder.
-*   **Role**: "Build the Body".
-*   **Tasks**:
-    *   Optimize `synz_core` performance and Unity IPC.
-    *   Implement new Llama.cpp features (Flash Attention, etc).
-    *   **Goal**: Reduce latency to 0ms.
+## Usage
 
-## License
-Open Source.
+**Wake Word:**
+The agent listens for the keyword "SYNZ" (pronounced "Sins").
+When heard, it wakes up for 30 seconds.
+
+**Voice Commands:**
+-   **Conversation:** "Hello, who are you?"
+-   **Coding:** "Write a Python script called game.py that prints hello world."
+-   **Execution:** "Run game.py."
+-   **Vision:** "Look at this." (Takes a screenshot).
+-   **Search:** "Search for the latest stock prices."
+
+## Troubleshooting
+
+-   **Crash on Startup:** Ensure `setup_synz.bat` completed successfully.
+-   **No Voice:** Check that Unity is running and the AudioSource volume is up.
+-   **Connection Failed:** Ensure no other program is using ports 8005 or 8006.

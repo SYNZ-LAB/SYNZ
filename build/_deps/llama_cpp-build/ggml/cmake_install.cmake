@@ -58,6 +58,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/include/ggml-opt.h"
     "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/include/ggml-metal.h"
     "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/include/ggml-rpc.h"
+    "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/include/ggml-virtgpu.h"
     "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/include/ggml-sycl.h"
     "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/include/ggml-vulkan.h"
     "C:/Users/Adminb/OneDrive/Documents/Projects/SYNZ/build/_deps/llama_cpp-src/ggml/include/ggml-webgpu.h"

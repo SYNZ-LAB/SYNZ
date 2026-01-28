@@ -5,6 +5,6 @@ includedir=C:/Program Files (x86)/SYNZ_Core/include
 
 Name: llama
 Description: Port of Facebook's LLaMA model in C/C++
-Version: 0.0.7771
+Version: 0.0.7863
 Libs: -L${libdir} -lggml -lggml-base -lllama
 Cflags: -I${includedir}

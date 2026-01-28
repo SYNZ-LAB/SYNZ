@@ -833,6 +833,12 @@ GGML_SYCL_GRAPH:BOOL=ON
 //ggml: sycl target device
 GGML_SYCL_TARGET:STRING=INTEL
 
+//ggml: use the VirtGPU/Virglrenderer API Remoting frontend
+GGML_VIRTGPU:BOOL=OFF
+
+//ggml: build the VirtGPU/Virglrenderer API Remoting backend
+GGML_VIRTGPU_BACKEND:BOOL=OFF
+
 //ggml: use Vulkan
 GGML_VULKAN:BOOL=OFF
 

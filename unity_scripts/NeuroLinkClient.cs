@@ -75,11 +75,32 @@ public class NeuroLinkClient : MonoBehaviour
 
     void ProcessThought(string thought)
     {
-        Debug.Log($"<color=cyan>[SYNZ]: {thought}</color>");
-        
-        // TODO: This is where we will hook up TTS and Animation!
-        // if (thought.StartsWith("EMOTE:")) PlayEmote(thought);
-        // TTS.Speak(thought);
+        // 1. Parse Emotion Tags: [HAPPY] Hello there!
+        string emotion = "NORMAL";
+        string cleanText = thought;
+
+        if (thought.Contains("[") && thought.Contains("]"))
+        {
+            try {
+                int start = thought.IndexOf("[");
+                int end = thought.IndexOf("]");
+                if (end > start)
+                {
+                    emotion = thought.Substring(start + 1, end - start - 1).ToUpper(); // Extract "HAPPY"
+                    cleanText = thought.Remove(start, end - start + 1).Trim(); // Remove "[HAPPY]"
+                }
+            } catch { /* Ignore parse errors */ }
+        }
+
+        // 2. Send to Live2D Controller
+        // We find the controller in the scene (created by Bootstrap)
+        var live2D = FindObjectOfType<CubismSYNZController>(); 
+        if (live2D != null)
+        {
+            live2D.SetEmotion(emotion);
+        }
+
+        Debug.Log($"<color=cyan>[SYNZ]: {cleanText}</color> <color=grey>({emotion})</color>");
     }
 
     void OnDestroy()

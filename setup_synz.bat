@@ -16,29 +16,18 @@ call venv\Scripts\python.exe -m pip install --upgrade pip
 echo     - Installing dependencies...
 call venv\Scripts\pip install -r TheBrain\requirements.txt
 
-:: 2. C++ Build
+:: 2. C++ Build (DISABLED - USING PYTHON BRAIN)
 echo.
-echo [2/3] Building C++ Core...
-if not exist "build" mkdir build
-cd build
-echo     - Configuring CMake...
-cmake ..
-if %errorlevel% neq 0 (
-    echo [ERR] CMake Configuration Failed! Do you have CMake installed?
-    pause
-    exit /b %errorlevel%
-)
-echo     - Compiling (Release Mode)...
-cmake --build . --config Release
-cd ..
+echo [2/3] Skipping C++ Build (Native Core). Using Python Fallback.
+:: if not exist "build" mkdir build
+:: cd build
+:: cmake ..
+:: cmake --build . --config Release
+:: cd ..
 
 echo.
 echo [3/3] Verify...
-if exist "build\Release\synz_core.exe" (
-    echo [SUCCESS] synz_core.exe created.
-) else (
-    echo [WARN] synz_core.exe missing. Build might have failed.
-)
+echo Ready to launch Python Brain.
 
 echo.
 echo ==========================================

@@ -4,8 +4,8 @@ echo ==========================================
 echo       SYNZ GOD-MODE LAUNCHER 🚀
 echo ==========================================
 echo.
-echo [1/3] Launching Core (Llama-3)...
-start "SYNZ Core (C++)" /min cmd /k "build\Release\synz_core.exe"
+echo [1/3] Launching Core (Llama-3 Python)...
+start "SYNZ Core (Brain)" /min cmd /k "venv\Scripts\python.exe -u TheBrain\brain_server.py"
 
 echo [2/3] Launching Face (Python)...
 start "SYNZ Face (Main)" cmd /k "venv\Scripts\python.exe -u TheBrain\face_server.py"
