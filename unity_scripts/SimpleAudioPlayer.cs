@@ -6,10 +6,36 @@ using UnityEngine.Networking;
 public class SimpleAudioPlayer : MonoBehaviour
 {
     private AudioSource audioSource;
+    public static SimpleAudioPlayer Instance { get; private set; }
+    public float CurrentVolume { get; private set; }
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
         audioSource = GetComponent<AudioSource>();
+    }
+
+    void Update()
+    {
+        if (audioSource.isPlaying)
+        {
+            float[] data = new float[256];
+            audioSource.GetOutputData(data, 0);
+            float sum = 0;
+            foreach (var s in data) sum += s * s;
+            CurrentVolume = Mathf.Sqrt(sum / 256.0f);
+        }
+        else
+        {
+            CurrentVolume = 0f;
+        }
     }
 
     public void PlayFromFile(string absolutePath)

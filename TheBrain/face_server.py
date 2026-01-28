@@ -269,6 +269,36 @@ while True:
              else:
                   sock.sendto("[ERR] Usage: !write filename|content".encode('utf-8'), addr)
              continue
+        
+        elif user_msg.startswith("!run "):
+             filename = user_msg[5:].strip()
+             print(f"{C_SELF}[THE HANDS] Running {filename}...")
+             
+             # Execute
+             reply = hands.run_file(filename)
+             print(f"{C_SYS}[RUN RESULT]:\n{reply}")
+             
+             # --- [NEW] The Reflex Loop ---
+             # Don't just show output. React to it.
+             # We construct a new "internal thought" prompt.
+             
+             if "[FAIL]" in reply:
+                 reflex_prompt = f"SYSTEM_EVENT: I ran '{filename}' but it failed with this output:\n{reply}\n\nTASK: Explain the error simply to the user (like a teacher) and immediately use !write to fix it."
+             else:
+                 reflex_prompt = f"SYSTEM_EVENT: I ran '{filename}' successfully. Output:\n{reply}\n\nTASK: Tell the user it worked and explain what the code did."
+
+             # Recurse: Send THIS prompt to the Logic Brain as if it was my own thought
+             # We bypass the 'user_msg' loop and jump straight to logic processing
+             print(f"{C_SELF}[REFLEX] Analyzing execution result...")
+             
+             # We reuse the logic block below to get a personality response
+             # Hack: Set user_msg to reflex_prompt and let it flow down
+             user_msg = reflex_prompt
+             # Remove [SYSTEM_EVENT] tag for the user display? No, keep it internal.
+             
+             # Let it fall through to the 'context_data' logic below...
+             pass 
+
 
         # --- THE ROUTER ---
         # [PHASE 9 UPDATE]: "God Mode" enabled. All traffic goes to Core (Llama 3).

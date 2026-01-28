@@ -1,6 +1,8 @@
 import os
 import shutil
 import time
+import subprocess
+import sys
 
 class EditorAgent:
     def __init__(self, root_dir="."):
@@ -62,6 +64,37 @@ class EditorAgent:
             return f"[SUCCESS] Wrote {len(content)} bytes to {os.path.basename(path)}. {backup_msg}"
         except Exception as e:
             return f"[ERR] Write Failed: {e}"
+
+    def run_file(self, path):
+        """Executes a Python script and returns stdout/stderr."""
+        safe, abs_path = self._is_safe(path)
+        if not safe:
+            return f"[ERR] Access Denied: {path} is outside the sandbox."
+
+        if not os.path.exists(abs_path):
+            return f"[ERR] File not found: {path}"
+
+        print(f"[HANDS] Executing {os.path.basename(path)}...")
+        try:
+            # Run in a separate process
+            # Capture output
+            result = subprocess.run(
+                [sys.executable, abs_path], 
+                capture_output=True, 
+                text=True, 
+                timeout=30 # 30s timeout to prevent infinite loops
+            )
+            
+            output = f"--- STDOUT ---\n{result.stdout}\n--- STDERR ---\n{result.stderr}"
+            if result.returncode == 0:
+                return f"[SUCCESS] Execution Finished:\n{output}"
+            else:
+                return f"[FAIL] Execution Failed (Code {result.returncode}):\n{output}"
+                
+        except subprocess.TimeoutExpired:
+            return "[ERR] Execution Timed Out after 30s."
+        except Exception as e:
+            return f"[ERR] Execution Failed: {e}"
 
 if __name__ == "__main__":
     # Test
