@@ -1,30 +1,30 @@
-# SYNZ: The Digital Human Agent 🧠✨
+# SYNZ: The Digital Human Agent
 
 SYNZ is a fully autonomous **Digital Human** capable of seeing, hearing, speaking, remembering, and writing code. She lives on your desktop, interacts via a Live2D anime avatar, and uses local LLMs (Llama-3) to think.
 
 ---
 
-## 🏗️ How It Works (Architecture)
+## How It Works (Architecture)
 
 SYNZ is built as a **Distributed System** spanning multiple processes that talk to each other. This allows her to think, hear, and move simultaneously without lagging.
 
-### 1. The Ears (Hearing) 👂
+### 1. The Ears (Hearing)
 *   **Technology:** `openai-whisper` (Local).
 *   **Function:** Listens to your microphone in real-time. uses VAD (Voice Activity Detection) to detect speech and transcribes it to text.
 *   **Process:** Sends text to the *Face Server* via UDP.
 
-### 2. The Face (Personality & Routing) 👤
+### 2. The Face (Personality & Routing)
 *   **Technology:** Python, UDP Sockets.
 *   **Function:** The central hub. It receives text, decides what to do (Answer? Search? Code?), and manages the "Agentic State".
 *   **Features:**
     *   **Short Term Memory:** Remembers the last few minutes of conversation.
     *   **Tools:** Can trigger "The Hands" (Coding) or "The Eyes" (Vision).
 
-### 3. The Brain (Logic Core) 🧠
+### 3. The Brain (Logic Core)
 *   **Technology:** `Llama-3-8B` (via `llama-cpp-python`).
 *   **Function:** Pure intelligence. It receives a prompt ("Write a snake game") and generates the logic/code. It runs locally on your GPU/CPU.
 
-### 4. The Body (Visualization) 💃
+### 4. The Body (Visualization)
 *   **Technology:** Unity Engine + Live2D Cubism.
 *   **Function:** The visual avatar.
     *   **Lip Sync:** Moves mouth in sync with audio volume.
@@ -32,7 +32,7 @@ SYNZ is built as a **Distributed System** spanning multiple processes that talk 
 
 ---
 
-## 🛠️ Installation Guide
+## Installation Guide
 
 ### Prerequisites
 Before you start, ensure you have:
@@ -60,7 +60,7 @@ Before you start, ensure you have:
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ### 1. Launch the Brain
 Double-click **`start_synz.bat`**.
@@ -77,7 +77,7 @@ Double-click **`start_synz.bat`**.
 
 ---
 
-## 🎮 Usage & Features
+## Usage & Features
 
 ### The Wake Word
 She is polite and won't listen until you address her.
@@ -97,7 +97,7 @@ Once awake, try these:
 
 ---
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 **Q: I get an error about "ChromaDB" or "Memory"?**
 A: If you are on Python 3.14+, ChromaDB is disabled. We use a **JSON Fallback Memory** automatically. Just ignore the warning; she still remembers you!
