@@ -161,6 +161,7 @@ def generate_sass(context):
 # --- 3. RL Memory Buffer ---
 last_user_input = ""
 last_ai_response = ""
+conversation_history = [] # [NEW] Short Term Memory Buffer
 
 def handle_feedback(user_msg):
     global last_user_input, last_ai_response

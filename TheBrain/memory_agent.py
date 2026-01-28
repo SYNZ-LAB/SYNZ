@@ -1,97 +1,87 @@
 import os
+import json
 import uuid
+import time
+from collections import Counter
 
 # --- SAFETY WRAPPER ---
-try:
-    import chromadb
-    from chromadb.utils import embedding_functions
-    MEMORY_AVAILABLE = True
-except ImportError:
-    print("[MEMORY] WARN: ChromaDB/SentenceTransformers not found (Python 3.14?). Memory disabled.")
-    MEMORY_AVAILABLE = False
-except Exception as e:
-    print(f"[MEMORY] WARN: Dependency Error: {e}")
-    MEMORY_AVAILABLE = False
-
+# We try to import ChromaDB, but since we know it fails on 3.14, we prioritize the JSON fallback logic
+# if the import fails.
 
 class MemoryAgent:
-    def __init__(self, db_path="memory_db"):
-        if not MEMORY_AVAILABLE:
-            print("[MEMORY] Hippocampus OFFLINE (Dummy Mode).")
-            return
+    def __init__(self, db_path="synz_memories.json"):
+        # Path resolution
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        self.json_path = os.path.join(script_dir, db_path)
+        self.mode = "JSON" # Force JSON mode for safety on this user's machine
+        
+        # Load existing
+        self.memories = []
+        self.load_memories()
 
+        print(f"[MEMORY] Hippocampus Loaded (JSON Mode). {len(self.memories)} memories stored.")
+
+    def load_memories(self):
+        if os.path.exists(self.json_path):
+            try:
+                with open(self.json_path, 'r', encoding='utf-8') as f:
+                    self.memories = json.load(f)
+            except Exception as e:
+                print(f"[MEMORY] Corrupt DB: {e}. Starting fresh.")
+                self.memories = []
+
+    def save_memories(self):
         try:
-            # Create DB directory if not exists (relative to this script)
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            full_db_path = os.path.join(script_dir, db_path)
-            
-            print(f"[MEMORY] Initializing Hippocampus at {full_db_path}...")
-            
-            # 1. Setup Database (Persistent)
-            self.client = chromadb.PersistentClient(path=full_db_path)
-            
-            # 2. Setup Embedding (The "Encoder")
-            # "all-MiniLM-L6-v2" is small, fast, and good for English.
-            self.ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
-            
-            # 3. Get/Create Collection
-            self.collection = self.client.get_or_create_collection(
-                name="synz_memories",
-                embedding_function=self.ef
-            )
-            print(f"[MEMORY] Hippocampus Loaded. {self.collection.count()} memories stored.")
+            with open(self.json_path, 'w', encoding='utf-8') as f:
+                json.dump(self.memories, f, indent=2)
         except Exception as e:
-             print(f"[MEMORY] Failed to load DB: {e}. Switching to Dummy Mode.")
-             self.collection = None
+            print(f"[ERR] Failed to save memory: {e}")
 
     def remember(self, text, metadata=None):
-        """Saves a thought/conversation to the database."""
-        if not MEMORY_AVAILABLE or not hasattr(self, 'collection') or self.collection is None:
-            return
-
-        try:
-             # Random ID
-             mem_id = str(uuid.uuid4())
-             
-             self.collection.add(
-                 documents=[text],
-                 metadatas=[metadata or {"source": "conversation", "timestamp": "now"}],
-                 ids=[mem_id]
-             )
-        except Exception as e:
-             print(f"[ERR] Memory Save Failed: {e}")
+        """Saves a thought to JSON."""
+        entry = {
+            "id": str(uuid.uuid4()),
+            "text": text,
+            "metadata": metadata or {"source": "conversation", "timestamp": time.time()}
+        }
+        self.memories.append(entry)
+        self.save_memories()
 
     def recall(self, query, n_results=2):
-        """Finds relevant memories based on the query."""
-        if not MEMORY_AVAILABLE or not hasattr(self, 'collection') or self.collection is None:
+        """Finds memories using Keyword Matches (dumb but fast)."""
+        if not self.memories:
             return ""
 
-        try:
-            if self.collection.count() == 0:
-                return ""
-
-            results = self.collection.query(
-                query_texts=[query],
-                n_results=n_results
-            )
+        # 1. Simple Keyword Scoring
+        query_words = set(query.lower().split())
+        scored = []
+        
+        for mem in self.memories:
+            mem_text = mem['text']
+            mem_words = set(mem_text.lower().split())
             
-            # Extract text
-            memories = results['documents'][0]
-            if not memories:
-                return ""
-            
-            # Format
-            context = "### RECALLED MEMORIES ###\n"
-            for mem in memories:
-                context += f"- {mem}\n"
-            return context
-            
-        except Exception as e:
-            print(f"[ERR] Memory Recall Failed: {e}")
+            # Intersection count
+            overlap = len(query_words.intersection(mem_words))
+            if overlap > 0:
+                scored.append((overlap, mem_text))
+        
+        # 2. Sort by overlap
+        scored.sort(key=lambda x: x[0], reverse=True)
+        
+        # 3. Take top N
+        top_memories = [x[1] for x in scored[:n_results]]
+        
+        if not top_memories:
             return ""
+
+        # Format
+        context = "### RECALLED MEMORIES (JSON) ###\n"
+        for m in top_memories:
+            context += f"- {m}\n"
+        return context
 
 if __name__ == "__main__":
-    # Test
     m = MemoryAgent()
     m.remember("My name is User.")
+    m.remember("The sky is blue.")
     print(m.recall("What is my name?"))
