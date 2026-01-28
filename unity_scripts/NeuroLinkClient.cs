@@ -1,6 +1,6 @@
 using System;
-using System.IO;
-using System.IO.Pipes;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
@@ -8,10 +8,13 @@ using System.Collections.Concurrent;
 
 public class NeuroLinkClient : MonoBehaviour
 {
-    private NamedPipeClientStream pipeClient;
+    private UdpClient udpClient;
     private Thread listenerThread;
     private bool isRunning = false;
-    private ConcurrentQueue<string> messageQueue = new ConcurrentQueue<string>(); // Thread-safe queue
+    private ConcurrentQueue<string> messageQueue = new ConcurrentQueue<string>();
+
+    private const string FACE_IP = "127.0.0.1";
+    private const int FACE_PORT = 8005;
 
     void Start()
     {
@@ -20,53 +23,80 @@ public class NeuroLinkClient : MonoBehaviour
 
     void StartConnection()
     {
-        listenerThread = new Thread(ConnectAndListen);
-        listenerThread.IsBackground = true;
-        listenerThread.Start();
+        try 
+        {
+            // Bind to ANY available port
+            udpClient = new UdpClient(0); 
+            udpClient.Client.ReceiveTimeout = 1000; // 1s timeout to check for shutdown
+            
+            Debug.Log($"[NeuroLink] UDP Socket created on Port {((IPEndPoint)udpClient.Client.LocalEndPoint).Port}");
+
+            // Send Handshake
+            Send("Unity Connected");
+
+            listenerThread = new Thread(ListenLoop);
+            listenerThread.IsBackground = true;
+            listenerThread.Start();
+            isRunning = true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[NeuroLink] Failed to start UDP: {e.Message}");
+        }
     }
 
-    void ConnectAndListen()
+    void ListenLoop()
     {
-        while (true) // Auto-reconnect loop
+        IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
+        while (isRunning)
         {
             try
             {
-                pipeClient = new NamedPipeClientStream(".", "SYNZ_NeuroLink", PipeDirection.InOut);
-                Debug.Log("[NeuroLink] Attempting to connect to SYNZ Core...");
-                
-                pipeClient.Connect(5000); // 5 sec timeout
-                Debug.Log("<color=green>[NeuroLink] Connected to Brain!</color>");
-                
-                isRunning = true;
-                
-                using (StreamReader reader = new StreamReader(pipeClient))
+                if (udpClient.Available > 0) 
                 {
-                    while (pipeClient.IsConnected && isRunning)
-                    {
-                        string line = reader.ReadLine();
-                        if (line != null)
-                        {
-                            // Enqueue for main thread
-                            messageQueue.Enqueue(line);
-                        }
-                    }
+                    byte[] data = udpClient.Receive(ref remoteEP);
+                    string message = Encoding.UTF8.GetString(data);
+                    messageQueue.Enqueue(message);
                 }
+                else
+                {
+                    Thread.Sleep(10); // Don't burn CPU
+                }
+            }
+            catch (SocketException) 
+            {
+                // Timeout is normal
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"[NeuroLink] Connection lost/failed: {e.Message}. Retrying in 2s...");
-                Thread.Sleep(2000);
+                Debug.LogWarning($"[NeuroLink] Receive Error: {e.Message}");
             }
-            finally
-            {
-                if (pipeClient != null) pipeClient.Dispose();
-            }
+        }
+    }
+
+    void Send(string message)
+    {
+        try
+        {
+            byte[] data = Encoding.UTF8.GetBytes(message);
+            udpClient.Send(data, data.Length, FACE_IP, FACE_PORT);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[NeuroLink] Send Error: {e.Message}");
         }
     }
 
     void Update()
     {
-        // Process messages on the Main Unity Thread (Required for UI/Animation)
+        // 1. Keep Alive (Heartbeat) every 5 seconds?
+        // Actually face_server just needs one ping. But re-pinging is safer.
+        if (Time.frameCount % 300 == 0) // Roughly every 5s at 60fps
+        {
+            Send("Unity Connected");
+        }
+
+        // 2. Process Messages
         while (messageQueue.TryDequeue(out string message))
         {
             ProcessThought(message);
@@ -75,7 +105,18 @@ public class NeuroLinkClient : MonoBehaviour
 
     void ProcessThought(string thought)
     {
-        // 1. Parse Emotion Tags: [HAPPY] Hello there!
+        // Ignore "ACK"
+        if (thought == "ACK") return;
+
+        // [AUDIO] Trigger
+        if (thought.StartsWith("[AUDIO]"))
+        {
+            string audioPath = thought.Substring(7).Trim();
+            PlayAudio(audioPath);
+            return;
+        }
+
+        // 1. Extraction Logic
         string emotion = "NORMAL";
         string cleanText = thought;
 
@@ -86,15 +127,18 @@ public class NeuroLinkClient : MonoBehaviour
                 int end = thought.IndexOf("]");
                 if (end > start)
                 {
-                    emotion = thought.Substring(start + 1, end - start - 1).ToUpper(); // Extract "HAPPY"
-                    cleanText = thought.Remove(start, end - start + 1).Trim(); // Remove "[HAPPY]"
+                    string tag = thought.Substring(start + 1, end - start - 1);
+                    if (tag == "HAPPY" || tag == "SAD" || tag == "ANGRY" || tag == "SURPRISED")
+                    {
+                        emotion = tag;
+                        cleanText = thought.Remove(start, end - start + 1).Trim();
+                    }
                 }
-            } catch { /* Ignore parse errors */ }
+            } catch { }
         }
 
         // 2. Send to Live2D Controller
-        // We find the controller in the scene (created by Bootstrap)
-        var live2D = FindObjectOfType<CubismSYNZController>(); 
+        var live2D = FindObjectOfType<Live2DController>(); // Using proper class name
         if (live2D != null)
         {
             live2D.SetEmotion(emotion);
@@ -103,10 +147,27 @@ public class NeuroLinkClient : MonoBehaviour
         Debug.Log($"<color=cyan>[SYNZ]: {cleanText}</color> <color=grey>({emotion})</color>");
     }
 
+    void PlayAudio(string path)
+    {
+        var player = GetComponent<SimpleAudioPlayer>();
+        if (player != null)
+        {
+            Debug.Log($"[NeuroLink] Playing Audio: {path}");
+            player.PlayFromFile(path);
+        }
+        else
+        {
+            // Fallback: Try to find on ANY object
+            player = FindObjectOfType<SimpleAudioPlayer>();
+            if (player != null) player.PlayFromFile(path);
+            else Debug.LogWarning("[NeuroLink] No SimpleAudioPlayer found!");
+        }
+    }
+
     void OnDestroy()
     {
         isRunning = false;
-        if (pipeClient != null) pipeClient.Dispose();
-        if (listenerThread != null) listenerThread.Abort(); 
+        if (udpClient != null) udpClient.Close();
+        if (listenerThread != null && listenerThread.IsAlive) listenerThread.Abort();
     }
 }

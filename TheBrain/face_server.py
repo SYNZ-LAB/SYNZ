@@ -112,7 +112,7 @@ def query_logic_brain(text):
         sock.sendto(text.encode('utf-8'), (CORE_IP, CORE_PORT))
         
         # Wait for reply (Blocking for now, simple)
-        sock.settimeout(5.0) # 5 second timeout for Logic
+        sock.settimeout(30.0) # 30 second timeout for Logic (Llama-3 is slow on CPU)
         data, _ = sock.recvfrom(4096)
         return data.decode('utf-8')
     except socket.timeout:
@@ -224,7 +224,7 @@ while True:
                  pass 
             else:
                  # Normal Wait
-                 data, addr = sock.recvfrom(1024)
+                 data, addr = sock.recvfrom(65535)
                  user_msg = data.decode('utf-8')
         except socket.timeout:
             continue # Loop back to check Agency again
