@@ -14,3 +14,12 @@ numpy
 SpeechRecognition
 pyaudio
 openai-whisper
+duckduckgo-search
+chromadb
+sentence-transformers
+pillow
+mss
+timm
+einops
+colorama
+pyperclip
