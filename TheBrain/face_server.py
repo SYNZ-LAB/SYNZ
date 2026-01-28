@@ -329,10 +329,15 @@ while True:
                 if web_data:
                     context_data = f"\n[SYSTEM_NOTE: Real-time search data]\n{web_data}\n"
         
-        # Send everything to Llama-3
-        final_query = context_data + user_msg
+        # [NEW] Local History Buffer (Short Term Memory)
+        # Required because Vector DB might be offline
+        history_text = "\n".join(conversation_history[-6:]) # Last 3 turns
         
-        print(f"{C_CORE}[THE SELF] Sending to Core...")
+        # Send everything to Llama-3
+        # Structure: System Context + History + User Input
+        final_query = f"{context_data}\n\n[CONVERSATION HISTORY]:\n{history_text}\n\nUser: {user_msg}\nSYNZ:"
+        
+        print(f"{C_CORE}[THE SELF] Sending path to Core...")
         logic_reply = query_logic_brain(final_query)
         
         # Fallback if Core is offline
@@ -340,6 +345,11 @@ while True:
              response = f"My brain is offline. ({logic_reply})"
         else:
              response = logic_reply
+             
+        # Update History
+        conversation_history.append(f"User: {user_msg}")
+        conversation_history.append(f"SYNZ: {response}")
+        if len(conversation_history) > 20: conversation_history.pop(0) # Keep buffer small
 
         # --- Update Memory ---
         last_user_input = user_msg
