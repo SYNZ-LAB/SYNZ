@@ -10,6 +10,7 @@ timm
 einops
 colorama
 pyperclip
-llama-cpp-python
+# llama-cpp-python handled by scripts
+
 transformers
 pywin32
