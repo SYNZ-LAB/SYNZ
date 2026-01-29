@@ -1,3 +1,4 @@
+import json
 import socket
 import struct
 import time
@@ -113,7 +114,7 @@ def query_logic_brain(text):
         
         # Wait for reply (Blocking for now, simple)
         sock.settimeout(30.0) # 30 second timeout for Logic (Llama-3 is slow on CPU)
-        data, _ = sock.recvfrom(4096)
+        data, _ = sock.recvfrom(65535) # Increased from 4096 to avoid WinError 10040
         return data.decode('utf-8')
     except socket.timeout:
         return "<ERROR: Logic Brain Timed Out>"
@@ -239,7 +240,14 @@ while True:
              UNITY_ADDR = addr
              print(f"{C_SYS}[SYSTEM] Body Connected at {addr}")
              sock.sendto(b"ACK", addr) # Acknowledge
+             # [FIX] Do NOT treat this as a user query, or we loop forever.
              continue
+        
+        # [FIX] Filter System Events from Chat History & Voice
+        # If it's a Log Watcher event, we process it but DO NOT add to history or speak immediately unless critical.
+        # Actually, for Log Watcher, we DO want to speak if it found a bug.
+        # But we must ensure we don't recall it recursively.
+        is_system_event = user_msg.startswith("[SYSTEM_EVENT")
 
         # --- 0. Check Feedback ---
         feedback_reply = handle_feedback(user_msg)
@@ -334,23 +342,69 @@ while True:
         # Required because Vector DB might be offline
         history_text = "\n".join(conversation_history[-6:]) # Last 3 turns
         
+        # [NEW] System Identity & Instructions
+        SYSTEM_PROMPT = (
+            "You are SYNZ, an intelligent and slightly sarcastic AI co-worker. "
+            "You help the user with coding, ideas, and general tasks.\n"
+            "EMOTIONS: You can express yourself using tags at the start of your message.\n"
+            "Supported Tags: [HAPPY], [SAD], [ANGRY], [SURPRISED], [SHY], [NORMAL].\n"
+            "Keep responses concise and helpful."
+        )
+
         # Send everything to Llama-3
-        # Structure: System Context + History + User Input
-        final_query = f"{context_data}\n\n[CONVERSATION HISTORY]:\n{history_text}\n\nUser: {user_msg}\nSYNZ:"
+        # [FIX] Send STRUCTURED JSON so Llama-3 knows who is who.
         
-        print(f"{C_CORE}[THE SELF] Sending path to Core...")
+        # 1. Convert History List [ "User: Hi", "SYNZ: Hello" ] -> List of Dicts
+        chat_format_history = []
+        for line in conversation_history:
+            if line.startswith("User: "):
+                chat_format_history.append({"role": "user", "content": line[6:]})
+            elif line.startswith("SYNZ: "):
+                chat_format_history.append({"role": "assistant", "content": line[6:]})
+
+        # 2. Build Packet
+        packet = {
+            "system": SYSTEM_PROMPT,
+            "history": chat_format_history,
+            "user": f"{context_data}\n\n{user_msg}" # Context attaches to current turn
+        }
+        
+        final_query = json.dumps(packet)
+        
+        print(f"{C_CORE}[THE SELF] Sending structured thought to Core...")
         logic_reply = query_logic_brain(final_query)
         
         # Fallback if Core is offline
         if "<ERROR" in logic_reply:
              response = f"My brain is offline. ({logic_reply})"
         else:
+             # [PHASE 16: HYBRID BRAIN RESTORATION]
+             # logic_reply contains the FACTUAL answer from Llama-3.
+             # We now feed this into YOUR Custom Transformer (NanoSYNZ) to apply personality/style.
+             
+             print(f"{C_SELF}[THE SELF] Applying Personality Filter (NanoSYNZ)...")
+             
+             # Context for NanoSYNZ: "Here is the fact: {fact}. Rewrite it as SYNZ."
+             # Note: NanoSYNZ needs to be trained on this pattern to work well.
+             # For now, we will try to just prompt it with the user context + logic answer.
+             
+             # However, since NanoSYNZ is currently very small/untrained on this specific task, 
+             # forcing it might degrade the answer to gibberish. 
+             # SAFE MODE: We stick to Llama-3 for now until you run 'train_scratch.py' with new data.
+             
+             # UNCOMMENT BELOW TO ENABLE HYBRID MODE ONCE TRAINED:
+             # style_prompt = f"Fact: {logic_reply}\nSYNZ style:"
+             # styled_response = generate_sass(style_prompt)
+             # response = styled_response
+             
+             # CURRENT: Llama-3 does both Logic + Personality (via System Prompt)
              response = logic_reply
              
-        # Update History
-        conversation_history.append(f"User: {user_msg}")
-        conversation_history.append(f"SYNZ: {response}")
-        if len(conversation_history) > 20: conversation_history.pop(0) # Keep buffer small
+        # Update History (Only for real user interactions, not system dumps)
+        if not is_system_event:
+            conversation_history.append(f"User: {user_msg}")
+            conversation_history.append(f"SYNZ: {response}")
+            if len(conversation_history) > 20: conversation_history.pop(0) # Keep buffer small
 
         # --- Update Memory ---
         last_user_input = user_msg
@@ -361,24 +415,41 @@ while True:
         
         # [NEW] Consolidate to Long-Term Memory
         # We save the pair: "User: ... SYNZ: ..."
-        brain.remember(f"User: {user_msg}\nSYNZ: {response}")
+        if not is_system_event:
+            brain.remember(f"User: {user_msg}\nSYNZ: {response}")
 
         # --- 4. TTS Generation (Voice) ---
-        print(f"{C_SELF}[THE SELF] Vocalizing: '{response}'")
         audio_ready = False
-        try:
-            # Clean tags if any (e.g. <SASS>)
-            clean_text = re.sub(r'<[^>]*>', '', response).strip()
-            # Use ABSOLUTE path for Unity to find it easily
-            # (Unity project handles absolute paths better than relative if CWD differs)
-            audio_path = os.path.join(script_dir, "..", "response.mp3") 
-            audio_path = os.path.abspath(audio_path)
-            
-            success = tts_engine.generate_audio_sync(clean_text, audio_path)
-            if success:
-                audio_ready = True
-        except Exception as e:
-            print(f"{C_ERR}[WARN] Voice Generation Failed: {e}")
+        
+        # [FIX] Don't vocalize internal system logs (like error reports), only user interactions
+        if not is_system_event:
+            print(f"{C_SELF}[THE SELF] Vocalizing: '{response}'")
+            try:
+                # Clean tags if any (e.g. <SASS>)
+                clean_text = re.sub(r'<[^>]*>', '', response).strip()
+                # Use ABSOLUTE path for Unity to find it easily
+                audio_path = os.path.join(script_dir, "..", "response.mp3") 
+                audio_path = os.path.abspath(audio_path)
+                
+                # [FIX] Delete previous if exists to force fresh write
+                if os.path.exists(audio_path):
+                    try: os.remove(audio_path)
+                    except: pass
+
+                success = tts_engine.generate_audio_sync(clean_text, audio_path)
+                
+                # [FIX] Verify Integrity
+                if success and os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
+                    time.sleep(0.3) # Increased to 0.3s to ensure file handle is released for Unity
+                    audio_ready = True
+                else:
+                     print(f"{C_ERR}[WARN] Audio file generation failed or empty.")
+                     audio_ready = False
+                     
+            except Exception as e:
+                print(f"{C_ERR}[WARN] Voice Generation Failed: {e}")
+        else:
+            print(f"{C_SYS}[THE SELF] (Internal Event - Voice Muted)")
 
         # 3. Send back to whoever asked (Likely C++ wrapper or Unity)
         # Send Text Response (Text Bubble)

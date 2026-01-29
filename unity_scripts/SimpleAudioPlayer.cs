@@ -45,28 +45,48 @@ public class SimpleAudioPlayer : MonoBehaviour
 
     IEnumerator LoadAndPlay(string path)
     {
-        // Unity needs "file://" prefix for local files
-        string eventUrl = "file://" + path;
+        // 1. Sanitize Path (Unity hates backslashes in URIs)
+        path = path.Replace("\\", "/");
         
-        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(eventUrl, AudioType.MPEG))
+        // 2. Ensure Protocol
+        string eventUrl;
+        if (!path.StartsWith("file://"))
+        {
+             // Handle "C:/..." vs "/Users/..."
+             if (!path.StartsWith("/")) 
+                eventUrl = "file:///" + path; // file:///C:/Path...
+             else
+                eventUrl = "file://" + path;
+        }
+        else
+        {
+            eventUrl = path;
+        }
+
+        // Debug.Log($"[AudioPlayer] Loading: {eventUrl}"); # Optional Debug
+
+        // Debug.Log($"[AudioPlayer] Loading: {eventUrl}"); # Optional Debug
+
+        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(eventUrl, AudioType.MPEG)) # Force MPEG
         {
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
-                Debug.LogError($"[AudioPlayer] Load Error: {www.error}");
+                Debug.LogError($"[AudioPlayer] Load Error for '{eventUrl}': {www.error}");
             }
             else
             {
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
-                if (clip != null)
+                if (clip != null && clip.loadState == AudioDataLoadState.Loaded)
                 {
                     Debug.Log($"[AudioPlayer] Playing Clip: {clip.length}s");
                     audioSource.clip = clip;
                     audioSource.Play();
-                    
-                    // Optional: Lip Sync Hook
-                    // OVRLipSync.Process(clip);
+                }
+                else
+                {
+                    Debug.LogWarning($"[AudioPlayer] Clip loaded but invalid or empty.");
                 }
             }
         }

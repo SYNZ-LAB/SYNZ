@@ -11,9 +11,10 @@ class SightAgent:
         print("[SIGHT] Initializing Visual Cortex (Moondream2)...")
         # Use Moondream2 (Small VLM)
         self.model_id = "vikhyatk/moondream2"
-        self.revision = "2024-08-26" # Pin revision for stability
+        self.revision = "2024-08-26" # Revert to stable revision (No pyvips required)
         
         try:
+            # Revert to standard loading. If it fails, we catch it below.
             self.model = AutoModelForCausalLM.from_pretrained(
                 self.model_id, 
                 trust_remote_code=True, 
@@ -27,7 +28,8 @@ class SightAgent:
             self.model.eval()
             print(f"[SIGHT] Eyes Opened on {self.device}.")
         except Exception as e:
-            print(f"[ERR] Vision Init Failed: {e}")
+            # CRITICAL: Do not crash the app if Vision fails. Just be blind.
+            print(f"[ERR] Vision Init Failed (Continuing Blind): {e}")
             self.model = None
 
     def capture_screen(self):

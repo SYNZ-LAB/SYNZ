@@ -1,5 +1,6 @@
-import time
+import json
 import socket
+import time
 import os
 import glob
 from llama_cpp import Llama
@@ -144,14 +145,42 @@ while True:
     try:
         # A. Network Request (From Face)
         try:
-            data, addr = sock.recvfrom(4096)
-            prompt = data.decode('utf-8')
-            print(f"{C_BRAIN}[REQ] Thinking...")
+            data, addr = sock.recvfrom(65535) # Increased from 4096 to prevent WinError 10040
+            decoded_data = data.decode('utf-8')
+            
+            messages = []
+            
+            # [FIX] Try to parse as JSON first (Structured Chat)
+            try:
+                packet = json.loads(decoded_data)
+                
+                # 1. System Prompt
+                if "system" in packet:
+                    messages.append({"role": "system", "content": packet["system"]})
+                    
+                # 2. History (List of {role, content})
+                if "history" in packet and isinstance(packet["history"], list):
+                    messages.extend(packet["history"])
+                    
+                # 3. User Input
+                if "user" in packet:
+                    messages.append({"role": "user", "content": packet["user"]})
+                    
+                print(f"{C_BRAIN}[REQ] Structured Chat ({len(messages)} msgs)...")
+                
+            except json.JSONDecodeError:
+                # Fallback: Legacy String Mode
+                prompt = decoded_data
+                messages = [{"role": "user", "content": prompt}]
+                print(f"{C_BRAIN}[REQ] Legacy Prompt...")
             
             # Inference
             output = llm.create_chat_completion(
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=150
+                messages=messages,
+                max_tokens=150,
+                temperature=0.7,
+                top_p=0.9,
+                repeat_penalty=1.1
             )
             response = output['choices'][0]['message']['content']
             
@@ -173,15 +202,21 @@ while True:
             msg = f"[SYSTEM_EVENT: Code Watcher]: {feedback}"
             sock.sendto(msg.encode('utf-8'), FACE_ADDR)
 
-        # C. Check Logs
-        logs = check_logs()
-        if logs and ("Error" in logs or "Exception" in logs):
-             prompt = f"Using this UNITY LOG, explain the error:\n{logs[-500:]}"
-             output = llm.create_chat_completion(messages=[{"role": "user", "content": prompt}])
-             feedback = output['choices'][0]['message']['content']
-             print(f"{C_BRAIN}[LOGS] {feedback}")
-             msg = f"[SYSTEM_EVENT: Log Watcher]: {feedback}"
-             sock.sendto(msg.encode('utf-8'), FACE_ADDR)
+        # C. Check Logs (DISABLED to prevent spam during voice testing)
+        # logs = check_logs()
+        # if logs and ("Error" in logs or "Exception" in logs):
+        #      prompt = f"Using this UNITY LOG, explain the error:\n{logs[-500:]}"
+        #      output = llm.create_chat_completion(
+        #          messages=[{"role": "user", "content": prompt}],
+        #          max_tokens=150,
+        #          temperature=0.7,
+        #          top_p=0.9,
+        #          repeat_penalty=1.1
+        #      )
+        #      feedback = output['choices'][0]['message']['content']
+        #      print(f"{C_BRAIN}[LOGS] {feedback}")
+        #      msg = f"[SYSTEM_EVENT: Log Watcher]: {feedback}"
+        #      sock.sendto(msg.encode('utf-8'), FACE_ADDR)
 
         time.sleep(0.1)
 

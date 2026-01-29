@@ -11,7 +11,7 @@ HOST_IP = "127.0.0.1"
 HOST_PORT = 8005
 SAMPLE_RATE = 16000
 BLOCK_SIZE = 4000 
-THRESHOLD = 0.015 
+THRESHOLD = 0.02 # RMS Threshold (Silence is usually < 0.01)
 SILENCE_DURATION = 0.6 # Reduced from 1.0 for snappier response
 
 print("[EARS] Loading Model 'tiny' for speed... (This may take a moment)")
@@ -64,19 +64,25 @@ def main_loop():
             # 2. Consuming audio chunks
             while not audio_queue.empty():
                 chunk = audio_queue.get()
-                volume = np.linalg.norm(chunk) * 10
+                # Switch to RMS (Root Mean Square) for standard amplitude (0.0 to 1.0)
+                # chunk is (4000, 1), flatten it first
+                volume = np.sqrt(np.mean(chunk.flatten()**2))
                 
                 # Visual Meter
-                bars = int(min(volume * 50, 20))
+                # RMS is usually very small. Noise ~0.001. Speech ~0.1
+                bars = int(min(volume * 300, 20)) # Scale up for visibility
                 meter = "|" * bars + " " * (20 - bars)
                 status = "REC " if is_recording else "    "
-                print(f"[EARS] {status}[{meter}]", end='\r')
+                
+                # [DEBUG] Show numeric value to help user tune threshold
+                print(f"[EARS] Vol:{volume:.4f} |{meter}| {status}", end='\r')
                 
                 # VAD Logic
                 if volume > THRESHOLD:
                     if not is_recording:
-                        # print("[EARS] Hearing speech...", end='\r') # Handled by meter now
-                        is_recording = True
+                         is_recording = True
+                    recording_buffer.append(chunk)
+                    silence_start = None # Reset silence timer
                     recording_buffer.append(chunk)
                     silence_start = None # Reset silence timer
                 elif is_recording:
@@ -99,15 +105,17 @@ def main_loop():
             time.sleep(0.01)
 
 # --- Wake Word Config ---
-WAKE_WORDS = ["SYNZ", "SINS", "SINNS", "SINCE", "SENDS", "XINS", "SCENES", "SYNTH", "SINES", "SIGNS", "SIMS", "SENSE", "CINS", "ZEN"] # Common Whisper misinterpretations
+WAKE_WORDS = ["SYNZ", "SINS", "SINNS", "SINCE", "SENDS", "XINS", "SCENES", "SYNTH", "SINES", "SIGNS", "SIMS", "SENSE", "CINS", "ZEN", "WAKE UP SYNZ", "WAKE UP SINS", "WAKE UP", "WAKEUP"] # Common Whisper misinterpretations
 AWAKE_DURATION = 30.0 # How long to stay awake after last interaction
 
 is_awake = False
 last_interaction_time = 0
+last_transcription = ""
+last_transcription_time = 0
 
 def process_audio():
     """Concatenates buffer and runs Whisper."""
-    global is_awake, last_interaction_time
+    global is_awake, last_interaction_time, last_transcription, last_transcription_time
     
     if not recording_buffer:
         return
@@ -123,17 +131,24 @@ def process_audio():
     # Flatten buffer
     audio_data = np.concatenate(recording_buffer, axis=0).flatten()
     
-    # Save DEBUG File
-    # wav.write("debug_last_heard.wav", SAMPLE_RATE, (audio_data * 32767).astype(np.int16))
-    
     audio_data = audio_data.astype(np.float32)
     
     # Transcribe
     try:
-        result = model.transcribe(audio_data, fp16=False) # fp16=False for CPU safety
+        # [FIX] condition_on_previous_text=False prevents the "looping" hallucination
+        result = model.transcribe(audio_data, fp16=False, language="en", condition_on_previous_text=False) 
         text = result["text"].strip()
         
         if text:
+            # [FIX] Deduplication (Debounce)
+            # If we hear the EXACT same thing within 2 seconds, it's a double-trigger or echo.
+            if text == last_transcription and (time.time() - last_transcription_time) < 2.0:
+                print(f"[EARS] Ignored Duplicate: '{text}'")
+                return
+
+            last_transcription = text
+            last_transcription_time = time.time()
+
             upper_text = text.upper()
             
             # WAKE WORD CHECK
@@ -145,7 +160,7 @@ def process_audio():
                     last_interaction_time = time.time()
                     # We pass the wake phrase through so she can respond to "Hey SYNZ what time is it"
                 else:
-                    print(f"[SLEEPING] Ignored: '{text}' (Say 'SYNZ' to wake)")
+                    print(f"[SLEEPING] Ignored: '{text}' (Say 'WAKE UP' to wake)")
                     return # Ignore this input
 
             # If we are here, we are AWAKE
