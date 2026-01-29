@@ -138,7 +138,7 @@ public class NeuroLinkClient : MonoBehaviour
         }
 
         // 2. Send to Live2D Controller
-        var live2D = FindObjectOfType<Live2DController>(); // Using proper class name
+        var live2D = FindFirstObjectByType<SYNZLive2DController>(); // Using proper class name
         if (live2D != null)
         {
             live2D.SetEmotion(emotion);
@@ -158,7 +158,7 @@ public class NeuroLinkClient : MonoBehaviour
         else
         {
             // Fallback: Try to find on ANY object
-            player = FindObjectOfType<SimpleAudioPlayer>();
+            player = FindFirstObjectByType<SimpleAudioPlayer>();
             if (player != null) player.PlayFromFile(path);
             else Debug.LogWarning("[NeuroLink] No SimpleAudioPlayer found!");
         }

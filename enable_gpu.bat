@@ -16,10 +16,8 @@ call venv\Scripts\pip install torch torchvision torchaudio --index-url https://d
 
 echo.
 echo [3/3] Installing Llama-3 with CUDA Support...
-:: We must set environment variables for the build
-set CMAKE_ARGS=-DGGML_CUDA=on
-set FORCE_CMAKE=1
-call venv\Scripts\pip install llama-cpp-python --no-cache-dir
+:: Use pre-built wheel to avoid compiling (requires heavy CUDA Toolkit)
+call venv\Scripts\pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
 
 echo.
 echo ==========================================

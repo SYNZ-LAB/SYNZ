@@ -52,15 +52,15 @@ public class SYNZ_Bootstrap : MonoBehaviour
     {
         // 4. Find Live2D Model in Scene
         // We look for any object with a "CubismModel" component
-        CubismModel model = FindObjectOfType<CubismModel>();
+        CubismModel model = FindFirstObjectByType<CubismModel>();
         
         if (model != null)
         {
             // Check if it has our controller
-            if (model.gameObject.GetComponent<Live2DController>() == null)
+            if (model.gameObject.GetComponent<SYNZLive2DController>() == null)
             {
-                model.gameObject.AddComponent<Live2DController>();
-                Debug.Log($"[SYNZ] Found Model '{model.name}' -> Attached Live2DController.");
+                model.gameObject.AddComponent<SYNZLive2DController>();
+                Debug.Log($"[SYNZ] Found Model '{model.name}' -> Attached SYNZLive2DController.");
             }
             else
             {

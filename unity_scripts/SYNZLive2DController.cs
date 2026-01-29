@@ -2,7 +2,7 @@ using UnityEngine;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 
-public class Live2DController : MonoBehaviour
+public class SYNZLive2DController : MonoBehaviour
 {
     private CubismModel _model;
     

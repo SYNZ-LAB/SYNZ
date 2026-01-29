@@ -99,7 +99,7 @@ def main_loop():
             time.sleep(0.01)
 
 # --- Wake Word Config ---
-WAKE_WORDS = ["SYNZ", "SINS", "SINNS", "SINCE", "SENDS", "XINS", "SCENES"] # Common Whisper misinterpretations
+WAKE_WORDS = ["SYNZ", "SINS", "SINNS", "SINCE", "SENDS", "XINS", "SCENES", "SYNTH", "SINES", "SIGNS", "SIMS", "SENSE", "CINS", "ZEN"] # Common Whisper misinterpretations
 AWAKE_DURATION = 30.0 # How long to stay awake after last interaction
 
 is_awake = False
