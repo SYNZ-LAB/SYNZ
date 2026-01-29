@@ -1,4 +1,6 @@
 @echo off
+:: Ensures script runs from its own directory
+cd /d "%~dp0"
 title SYNZ GPU Activator 🚀
 echo ==========================================
 echo       SYNZ GPU ACTIVATOR (NVIDIA)
