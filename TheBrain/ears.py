@@ -14,8 +14,8 @@ BLOCK_SIZE = 4000
 THRESHOLD = 0.02 # RMS Threshold (Silence is usually < 0.01)
 SILENCE_DURATION = 0.6 # Reduced from 1.0 for snappier response
 
-print("[EARS] Loading Model 'tiny' for speed... (This may take a moment)")
-model = whisper.load_model("tiny") # Switched from 'base' to 'tiny'
+print("[EARS] Loading Model 'base.en' for better accuracy... (This may take a moment)")
+model = whisper.load_model("base.en") # Switched from 'tiny' to 'base.en'
 print("[EARS] Model Loaded. Listening...")
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -35,6 +35,7 @@ def callback(indata, frames, time, status):
 
 def main_loop():
     global is_recording, silence_start, recording_buffer
+    mute_until = 0 # [FIX] Initialize local variable
     
     # Start stream
     print(f"\n[EARS] Audio Devices:\n{sd.query_devices()}")
@@ -61,7 +62,32 @@ def main_loop():
             except Exception as e:
                 print(f"\n[ERR] Net: {e}")
 
-            # 2. Consuming audio chunks
+            # 2. Check for Commands (Mute/Unmute)
+            try:
+                data, _ = cmd_sock.recvfrom(1024)
+                cmd = data.decode('utf-8').strip()
+                if cmd.startswith("MUTE"):
+                    duration = float(cmd.split(" ")[1])
+                    mute_until = time.time() + duration
+                    print(f"\n[EARS] Muted for {duration}s")
+                elif cmd == "UNMUTE":
+                    mute_until = 0
+                    print("\n[EARS] Unmuted.")
+            except BlockingIOError:
+                pass # No commands
+            except Exception:
+                pass
+
+            # 3. Check Mute State
+            if time.time() < mute_until:
+                # Drain audio buffer to prevent backlog while muted
+                while not audio_queue.empty():
+                    audio_queue.get()
+                print(f"\r[EARS] Zzz... ({int(mute_until - time.time())}s)", end="", flush=True)
+                time.sleep(0.1) # Small sleep to prevent busy-waiting
+                continue
+
+            # 4. Consuming audio chunks
             while not audio_queue.empty():
                 chunk = audio_queue.get()
                 # Switch to RMS (Root Mean Square) for standard amplitude (0.0 to 1.0)

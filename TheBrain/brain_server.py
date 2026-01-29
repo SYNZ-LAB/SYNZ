@@ -35,6 +35,7 @@ try:
         model_path=MODEL_PATH,
         n_ctx=2048,
         n_gpu_layers=35, # Attempt GPU offload
+        chat_format="llama-3", # [FIX] Force Llama-3 format
         verbose=False
     )
     print(f"{C_BRAIN}[BRAIN] Model Online.")
@@ -134,6 +135,7 @@ def check_logs():
 
 # 4. Main Loop
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # [FIX] Allow port reuse on restart
 sock.bind((HOST_IP, CORE_PORT))
 sock.setblocking(False)
 
@@ -175,14 +177,24 @@ while True:
                 print(f"{C_BRAIN}[REQ] Legacy Prompt...")
             
             # Inference
+            print(f"{C_BRAIN}[DEBUG] Messages: {messages}") # Debug Print
             output = llm.create_chat_completion(
-                messages=messages,
-                max_tokens=150,
+                messages=messages, # [FIX] Restored missing argument
                 temperature=0.7,
                 top_p=0.9,
-                repeat_penalty=1.1
+                repeat_penalty=1.3,
+                stop=["<|eot_id|>"]
             )
             response = output['choices'][0]['message']['content']
+            
+            # [FIX] Anti-Parrot Guard
+            # If Model just repeats the User, we intercept it.
+            last_user_input = messages[-1]['content'].strip().lower()
+            if response.strip().lower() == last_user_input:
+                print(f"{C_ERR}[GUARD] Blocked Parrot Response ('{response}'). forcing fallback.")
+                response = "I am SYNZ. I am listening."
+            elif response.strip() == "":
+                 response = "..."
             
             # Reply
             print(f"{C_BRAIN}[ANS] {response[:50]}...")

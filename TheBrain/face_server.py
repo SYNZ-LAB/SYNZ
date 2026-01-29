@@ -28,6 +28,15 @@ FACE_PORT = 8005
 CORE_IP = "127.0.0.1"
 CORE_PORT = 8006 # C++ Core must listen here
 
+# The Ears (Microphone)
+EARS_ADDR = ("127.0.0.1", 8007)
+
+def mute_ears(seconds=5.0):
+    try:
+        sock.sendto(f"MUTE {seconds}".encode('utf-8'), EARS_ADDR)
+    except:
+        pass
+
 # Paths
 script_dir = os.path.dirname(os.path.abspath(__file__))
 training_file_path = os.path.join(script_dir, "data", "training_data.txt")
@@ -215,28 +224,34 @@ def check_agency():
 
 while True:
     try:
-        try:
-            # 0. Check Agency (Proactive Check-in)
-            proactive_msg = check_agency()
-            if proactive_msg:
-                 print(f"{C_SELF}[AGENCY] Proactive Event Triggered: {proactive_msg}")
-                 user_msg = "[SYSTEM_EVENT: PROACTIVE_IDLE]"
-                 response = proactive_msg
-                 pass 
-            else:
-                 # Normal Wait
-                 data, addr = sock.recvfrom(65535)
-                 user_msg = data.decode('utf-8')
-        except socket.timeout:
-            continue # Loop back to check Agency again
+        # 0. Check Agency (Proactive Check-in)
+        # proactive_msg = check_agency() 
+        # (Disabled for stability for now)
 
-        if user_msg.startswith("[SYSTEM_EVENT"):
-             print(f"{C_SYS}[EVENT]: {user_msg}")
-        else:
-             print(f"{C_USER}[USER SAYS]: {user_msg}")
+        # 1. Wait for Network Request
+        try:
+             data, addr = sock.recvfrom(65535)
+             user_msg = data.decode('utf-8').strip()
+        except socket.timeout:
+             continue
+        except Exception as e:
+             print(f"{C_ERR}[NET ERR] {e}")
+             continue
+
+        # [FIX] Traffic Control
+        # If message comes from the Brain (8006), it's a System Event (e.g. Sentinel).
+        # We must NOT reply to 8006. We must speak to the User (Unity).
+        if addr[1] == CORE_PORT:
+             print(f"{C_CORE}[EVENT] Received from Brain: {user_msg}")
+             if UNITY_ADDR:
+                  addr = UNITY_ADDR # Redirect reply to User
+             else:
+                  print(f"{C_ERR}[WARN] Brain wants to speak, but no Body (Unity) connected.")
+                  continue # Drop it
+
 
         # [NEW] Detect Body (Unity)
-        if "Unity Connected" in user_msg:
+        if "unity connected" in user_msg.lower():
              UNITY_ADDR = addr
              print(f"{C_SYS}[SYSTEM] Body Connected at {addr}")
              sock.sendto(b"ACK", addr) # Acknowledge
@@ -245,8 +260,6 @@ while True:
         
         # [FIX] Filter System Events from Chat History & Voice
         # If it's a Log Watcher event, we process it but DO NOT add to history or speak immediately unless critical.
-        # Actually, for Log Watcher, we DO want to speak if it found a bug.
-        # But we must ensure we don't recall it recursively.
         is_system_event = user_msg.startswith("[SYSTEM_EVENT")
 
         # --- 0. Check Feedback ---
@@ -343,12 +356,14 @@ while True:
         history_text = "\n".join(conversation_history[-6:]) # Last 3 turns
         
         # [NEW] System Identity & Instructions
+        # [NEW] System Identity & Instructions
         SYSTEM_PROMPT = (
-            "You are SYNZ, an intelligent and slightly sarcastic AI co-worker. "
-            "You help the user with coding, ideas, and general tasks.\n"
-            "EMOTIONS: You can express yourself using tags at the start of your message.\n"
-            "Supported Tags: [HAPPY], [SAD], [ANGRY], [SURPRISED], [SHY], [NORMAL].\n"
-            "Keep responses concise and helpful."
+            "You are SYNZ, an AI assistant. "
+            "Your Goal: Answer the user's questions meaningfully and helpfully.\n"
+            "RULES:\n"
+            "1. NEVER repeat the user's input.\n"
+            "2. If asked 'Who are you?', reply: 'I am SYNZ.'\n"
+            "3. Be concise."
         )
 
         # Send everything to Llama-3
@@ -400,6 +415,20 @@ while True:
              # CURRENT: Llama-3 does both Logic + Personality (via System Prompt)
              response = logic_reply
              
+             # [FIX] Face-Level Anti-Parrot Block
+             # Sometimes Brain fails to catch it.
+             clean_resp = response.lower().strip()
+             clean_user = user_msg.lower().strip()
+             
+             if clean_resp == clean_user:
+                  print(f"{C_ERR}[FACE] Blocked Parrot Response! Override.")
+                  response = "I am listening."
+             elif "unity connected" in clean_resp:
+                  print(f"{C_ERR}[FACE] Blocked 'Unity Connected' Hallucination.")
+                  response = "I am ready." # Safe fallback
+             elif len(response) < 2:
+                  response = "..."
+             
         # Update History (Only for real user interactions, not system dumps)
         if not is_system_event:
             conversation_history.append(f"User: {user_msg}")
@@ -436,6 +465,11 @@ while True:
                     try: os.remove(audio_path)
                     except: pass
 
+                # [FIX] Mute Ears to prevent feedback loop (Hearing myself)
+                duration = max(3.0, len(clean_text) / 10.0) # Conservative estimate
+                mute_ears(duration)
+                print(f"{C_SYS}[THE SELF] Muting ears for {duration:.1f}s...")
+
                 success = tts_engine.generate_audio_sync(clean_text, audio_path)
                 
                 # [FIX] Verify Integrity
@@ -454,7 +488,13 @@ while True:
         # 3. Send back to whoever asked (Likely C++ wrapper or Unity)
         # Send Text Response (Text Bubble)
         print(f"{C_SELF}[REPLY]: {response}")
-        sock.sendto(response.encode('utf-8'), addr)
+        try:
+            sock.sendto(response.encode('utf-8'), addr)
+        except OSError as e:
+            if e.winerror == 10054:
+                print(f"{C_ERR}[WARN] Client Disconnected (10054)")
+            else:
+                print(f"{C_ERR}[NET ERR] {e}")
         
         # Send Audio Signal (The Mouth)
         if audio_ready:
