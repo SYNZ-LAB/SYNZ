@@ -58,6 +58,19 @@ Before you start, ensure you have:
     *   Create an Empty GameObject named `"Setup"` and drag the **`SYNZ_Bootstrap.cs`** script (found in `unity_scripts/`) onto it.
     *   *Optional:* Build the project (`File -> Build Settings -> Build`) to creates a standalone `.exe` (e.g., `SYNZ_Body.exe`).
 
+### 4. GPU Acceleration (Recommended)
+If you have an NVIDIA GPU, run this script **AFTER** the installer:
+*   Double-click `enable_gpu.bat`.
+*   This replaces the standard AI libraries with high-performance CUDA versions.
+*   *Result:* The brain will think 10x faster.
+
+### 5. Verifying Installation
+Before running the full system, you can test if your microphone and network are working:
+1.  Open a terminal in the project folder.
+2.  Run: `.\venv\Scripts\python.exe TheBrain\test_mic.py`
+3.  Speak for 5 seconds.
+4.  If it prints your words and a response from SYNZ, you are ready!
+
 ---
 
 ## How to Run

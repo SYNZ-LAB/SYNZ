@@ -11,8 +11,10 @@ public class Live2DController : MonoBehaviour
     private CubismParameter _breathParam;
     private CubismParameter _eyeLParam;
     private CubismParameter _eyeRParam;
+    private CubismParameter _cheekParam; // [NEW]
 
     public float sensitivity = 3.0f; // Multiplier for audio volume
+    [Range(0, 1)] public float Blush = 0f; // [NEW]
     
     // Blinking logic
     private float _blinkTimer;
@@ -31,6 +33,7 @@ public class Live2DController : MonoBehaviour
             _breathParam = _model.Parameters.FindById("ParamBreath");
             _eyeLParam = _model.Parameters.FindById("ParamEyeLOpen");
             _eyeRParam = _model.Parameters.FindById("ParamEyeROpen");
+            _cheekParam = _model.Parameters.FindById("ParamCheek"); // [NEW]
         }
         
         ResetBlink();
@@ -70,8 +73,11 @@ public class Live2DController : MonoBehaviour
             _breathParam.Value = breath;
         }
 
-        // --- 3. Blinking ---
+    // --- 3. Blinking ---
         HandleBlinking();
+
+        // --- 4. Emotion (Blush) ---
+        if (_cheekParam != null) _cheekParam.Value = Blush;
     }
 
     void HandleBlinking()
@@ -109,6 +115,24 @@ public class Live2DController : MonoBehaviour
             // Apply to eyes
             _eyeLParam.Value = _blinkState;
             _eyeRParam.Value = _blinkState;
+        }
+    }
+
+    // Called by NeuroLinkClient
+    public void SetEmotion(string emotion)
+    {
+        Debug.Log($"[Live2D] Setting Emotion: {emotion}");
+        switch (emotion.ToUpper())
+        {
+            case "HAPPY":
+            case "SHY":
+                Blush = 1.0f;
+                // Add Eye Smile logic here if desired
+                break;
+            case "NORMAL":
+            default:
+                Blush = 0f;
+                break;
         }
     }
 }
