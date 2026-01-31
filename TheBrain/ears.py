@@ -12,10 +12,10 @@ HOST_PORT = 8005
 SAMPLE_RATE = 16000
 BLOCK_SIZE = 4000 
 THRESHOLD = 0.02 # RMS Threshold (Silence is usually < 0.01)
-SILENCE_DURATION = 0.6 # Reduced from 1.0 for snappier response
+SILENCE_DURATION = 0.8 # [TUNED] Increased slightly to prevent chopping
 
-print("[EARS] Loading Model 'base.en' for better accuracy... (This may take a moment)")
-model = whisper.load_model("base.en") # Switched from 'tiny' to 'base.en'
+print("[EARS] Loading Model 'small.en' for high accuracy... (This may take a moment)")
+model = whisper.load_model("small.en") # [UPGRADE] Base -> Small (Cleaner STT)
 print("[EARS] Model Loaded. Listening...")
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -162,7 +162,14 @@ def process_audio():
     # Transcribe
     try:
         # [FIX] condition_on_previous_text=False prevents the "looping" hallucination
-        result = model.transcribe(audio_data, fp16=False, language="en", condition_on_previous_text=False) 
+        # [UPGRADE] Added initial_prompt to bias towards technical terms and name
+        result = model.transcribe(
+            audio_data, 
+            fp16=False, 
+            language="en", 
+            condition_on_previous_text=False,
+            initial_prompt="SYNZ, Unity, C#, programming, AI assistant, wake up"
+        ) 
         text = result["text"].strip()
         
         if text:

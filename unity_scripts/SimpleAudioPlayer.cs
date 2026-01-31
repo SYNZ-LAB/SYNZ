@@ -20,6 +20,8 @@ public class SimpleAudioPlayer : MonoBehaviour
             Instance = this;
         }
         audioSource = GetComponent<AudioSource>();
+        audioSource.spatialBlend = 0f; // Force 2D Sound (Crucial for LipSync volume consistency)
+        audioSource.loop = false;
     }
 
     void Update()

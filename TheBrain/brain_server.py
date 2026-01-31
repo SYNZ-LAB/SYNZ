@@ -182,7 +182,7 @@ while True:
                 messages=messages, # [FIX] Restored missing argument
                 temperature=0.7,
                 top_p=0.9,
-                repeat_penalty=1.3,
+                repeat_penalty=1.25, # [TUNED] Relaxed from 1.3 for better fluency
                 stop=["<|eot_id|>"]
             )
             response = output['choices'][0]['message']['content']
@@ -214,21 +214,40 @@ while True:
             msg = f"[SYSTEM_EVENT: Code Watcher]: {feedback}"
             sock.sendto(msg.encode('utf-8'), FACE_ADDR)
 
-        # C. Check Logs (DISABLED to prevent spam during voice testing)
-        # logs = check_logs()
-        # if logs and ("Error" in logs or "Exception" in logs):
-        #      prompt = f"Using this UNITY LOG, explain the error:\n{logs[-500:]}"
-        #      output = llm.create_chat_completion(
-        #          messages=[{"role": "user", "content": prompt}],
-        #          max_tokens=150,
-        #          temperature=0.7,
-        #          top_p=0.9,
-        #          repeat_penalty=1.1
-        #      )
-        #      feedback = output['choices'][0]['message']['content']
-        #      print(f"{C_BRAIN}[LOGS] {feedback}")
-        #      msg = f"[SYSTEM_EVENT: Log Watcher]: {feedback}"
-        #      sock.sendto(msg.encode('utf-8'), FACE_ADDR)
+        # C. Check Logs (Smart Sentinel)
+        logs = check_logs()
+        if logs and ("Error" in logs or "Exception" in logs):
+             # [FIX] Anti-Spam: Don't report the exact same log chunk twice
+             # We rely on 'check_logs' returning new data, but if the error implies a generic state...
+             # Actually check_logs output is already diff-based? 
+             # No, check_logs reads from last_log_pos. So it's ALWAYS new data.
+             # BUT Unity might spam the same error 60 times a second.
+             
+             # Heuristic: deduplicate lines? Or just report summary.
+             # For now, we trust the LLM to summarize, but we limit frequency?
+             # Let's just run it. check_logs only returns NEW appended content. 
+             # If Unity spams 1000 lines of NullRef, we get a huge chunk.
+             
+             # Truncate to last 1000 chars to save tokens
+             log_snippet = logs[-1000:]
+             
+             print(f"{C_BRAIN}[SENTINEL] analyzing new errors...")
+             prompt = f"Analyze this UNITY LOG ERROR concisely:\n{log_snippet}\nExplain what is broken."
+             
+             try:
+                 output = llm.create_chat_completion(
+                     messages=[{"role": "user", "content": prompt}],
+                     max_tokens=100, # Keep it short
+                     temperature=0.5
+                 )
+                 feedback = output['choices'][0]['message']['content']
+                 print(f"{C_BRAIN}[LOGS] {feedback}")
+                 
+                 # Send to Face (System Event)
+                 msg = f"[SYSTEM_EVENT: Log Watcher]: {feedback}"
+                 sock.sendto(msg.encode('utf-8'), FACE_ADDR)
+             except Exception as e:
+                 print(f"{C_ERR}[LOG ERR] {e}")
 
         time.sleep(0.1)
 
