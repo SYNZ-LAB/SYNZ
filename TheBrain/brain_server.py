@@ -90,48 +90,65 @@ def send_to_unity(msg):
 
 # 3. File Watchers
 file_stamps = {}
+CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "mentor_config.json"))
+
+# Default Config (Fallback)
+WATCH_CONFIG = {
+    "watch_paths": [os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))],
+    "allowed_extensions": ['.cs', '.py', '.cpp', '.h', '.bat', '.cmake', '.txt'],
+    "ignored_dirs": ['venv', '.git', 'Library', 'Temp', 'Build', 'obj', '__pycache__', '.vs']
+}
+
+# Load Config
+if os.path.exists(CONFIG_PATH):
+    try:
+        with open(CONFIG_PATH, 'r') as f:
+            user_config = json.load(f)
+            # Merge/Overwrite
+            if "watch_paths" in user_config: WATCH_CONFIG["watch_paths"] = user_config["watch_paths"]
+            if "allowed_extensions" in user_config: WATCH_CONFIG["allowed_extensions"] = set(user_config["allowed_extensions"])
+            if "ignored_dirs" in user_config: WATCH_CONFIG["ignored_dirs"] = set(user_config["ignored_dirs"])
+            print(f"{C_BRAIN}[CONFIG] Loaded Monitor Config. Watching: {len(WATCH_CONFIG['watch_paths'])} paths.")
+    except Exception as e:
+        print(f"{C_ERR}[CONFIG] Failed to load mentor_config.json: {e}")
 
 def check_code():
     global file_stamps
     changes = []
     
-    if not os.path.exists(UNITY_SCRIPTS_PATH): return None
-
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-WATCH_EXTENSIONS = {'.cs', '.py', '.cpp', '.h', '.bat', '.cmake', '.txt', '.md'}
-SKIP_DIRS = {'venv', '.git', 'Library', 'Temp', 'Build', 'obj', '__pycache__', '.vs'}
-
-def check_code():
-    changes = []
-    
-    # Recursive Scan from Project Root
-    for root, dirs, files in os.walk(PROJECT_ROOT):
-        # Filter Directories to Skip (modify 'dirs' in-place to stop recursion)
-        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+    # Iterate over all configured paths
+    for base_path in WATCH_CONFIG["watch_paths"]:
+        # Resolve full path (handle '.' or relative paths)
+        if base_path == ".": base_path = os.path.dirname(CONFIG_PATH) # Root of SYNZ
         
-        for file in files:
-            ext = os.path.splitext(file)[1].lower()
-            if ext in WATCH_EXTENSIONS:
-                full_path = os.path.join(root, file)
-                try:
-                    mtime = os.path.getmtime(full_path)
-                    
-                    if full_path not in file_stamps:
-                        file_stamps[full_path] = mtime
-                    elif file_stamps[full_path] != mtime:
-                        # File Changed!
-                        file_stamps[full_path] = mtime
-                        rel_path = os.path.relpath(full_path, PROJECT_ROOT)
-                        print(f"{C_BRAIN}[WATCHER] Code Changed: {rel_path}")
+        if not os.path.exists(base_path): continue
+
+        for root, dirs, files in os.walk(base_path):
+            # Filter Directories (Modify in-place)
+            dirs[:] = [d for d in dirs if d not in WATCH_CONFIG["ignored_dirs"]]
+            
+            for file in files:
+                ext = os.path.splitext(file)[1].lower()
+                if ext in WATCH_CONFIG["allowed_extensions"]:
+                    full_path = os.path.join(root, file)
+                    try:
+                        mtime = os.path.getmtime(full_path)
                         
-                        # Read specific content (Limit to 2000 chars to avoid token explosion)
-                        with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
-                             content = f.read()
-                             changes.append(f"FILE: {rel_path}\n{content[:5000]}") # 5k char limit per file
-                             
-                except Exception as e:
-                    # File might be locked or deleted during scan
-                    continue
+                        if full_path not in file_stamps:
+                            file_stamps[full_path] = mtime
+                        elif file_stamps[full_path] != mtime:
+                            # File Changed!
+                            file_stamps[full_path] = mtime
+                            # [FIX] Use absolute path for clarity in Multi-Project setup
+                            print(f"{C_BRAIN}[WATCHER] Code Changed: {full_path}")
+                            
+                            # Read content
+                            with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
+                                 content = f.read()
+                                 changes.append(f"FILE: {full_path}\n{content[:5000]}")
+                                 
+                    except Exception:
+                        continue
     
     if changes:
         return "\n\n".join(changes)
@@ -226,7 +243,12 @@ while True:
                 print(f"{C_BRAIN}[REQ] Legacy Prompt...")
             
             # Inference
-            print(f"{C_BRAIN}[DEBUG] Messages: {messages}") # Debug Print
+            # Inference
+            last_msg_content = messages[-1]['content'] if messages else "???"
+            # Clean up newlines for log readability
+            readable_msg = last_msg_content.replace('\n', ' ')[:80] 
+            print(f"{C_BRAIN}[REQ] User: '{readable_msg}...' (Hist: {len(messages)})")
+            # print(f"{C_BRAIN}[DEBUG] Full Context Sent.") # Disabled for readability
             output = llm.create_chat_completion(
                 messages=messages, # [FIX] Restored missing argument
                 temperature=0.7,

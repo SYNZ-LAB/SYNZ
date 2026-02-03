@@ -31,7 +31,7 @@ public class SYNZLive2DController : MonoBehaviour
     private const float JUMP_FORCE = 0.6f; // How high to jump
     
     // Debug
-    private float _debugTimer = 0f;
+
 
     void Start()
     {
@@ -61,24 +61,21 @@ public class SYNZLive2DController : MonoBehaviour
             if (_cheekParam == null) _cheekParam = _model.Parameters.FindById("PARAM_CHEEK");
         }
         
-        // [FIX] Auto-Remove Buggy Component (Deep Search)
-        var buggyComponent = GetComponentInChildren(System.Type.GetType("Live2D.Cubism.Framework.CubismFadeStateObserver"));
-        // Type.GetType might fail if assembly not loaded. Fallback to string search if possible?
-        // Actually, GetComponent(string) only works on the same GameObject.
-        // Recursive search by name is harder.
-        // Let's stick to user-facing instruction if this fails, OR try to find by type if we can namespace it.
-        // But I don't import the namespace line 2. 
-        // Let's use string Name check on all MonoBehaviours.
-        
-        var allComponents = GetComponentsInChildren<MonoBehaviour>();
-        foreach (var c in allComponents)
+        // [FIX 3.0] Remove Crashing *StateMachineBehaviour* from Animator
+        var animators = GetComponentsInChildren<Animator>();
+        foreach (var anim in animators)
         {
-            if (c != null && c.GetType().Name == "CubismFadeStateObserver")
+            var behaviours = anim.GetBehaviours<StateMachineBehaviour>();
+            foreach (var b in behaviours)
             {
-                Debug.LogWarning($"[SYNZ] Removing crashing component: {c.GetType().Name} from {c.gameObject.name}");
-                Destroy(c);
+                if (b.GetType().FullName.Contains("CubismFadeStateObserver") || b.GetType().Name == "CubismFadeStateObserver")
+                {
+                    Debug.LogWarning($"[SYNZ] Destroying crashing StateMachineBehaviour: {b.GetType().Name} on {anim.gameObject.name}");
+                    DestroyImmediate(b); // Force immediate removal
+                }
             }
         }
+
 
         ResetBlink();
     }

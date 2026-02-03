@@ -17,6 +17,7 @@ C_USER = Fore.CYAN
 C_SYS = Fore.YELLOW
 C_CORE = Fore.MAGENTA
 C_ERR = Fore.RED
+C_WARN = Fore.YELLOW # [FIX] Defined C_WARN
 
 
 # --- Configuration ---
@@ -29,7 +30,7 @@ CORE_IP = "127.0.0.1"
 CORE_PORT = 8006 # C++ Core must listen here
 
 # The Ears (Microphone)
-EARS_ADDR = ("127.0.0.1", 8007)
+EARS_ADDR = ("127.0.0.1", 8009) # [FIX] Updated to match Ears CMD_PORT
 
 def mute_ears(seconds=5.0):
     try:
@@ -116,15 +117,28 @@ sock.settimeout(TIMEOUT)
 
 def query_logic_brain(text):
     """Asks the C++ Core for help with code/math."""
-    print(f"[THE SELF] Asking Logic Brain: '{text}'")
+    print(f"[THE SELF] Asking Logic Brain ({len(text)} bytes)...")
     try:
         # Send to C++ (Port 8006)
         sock.sendto(text.encode('utf-8'), (CORE_IP, CORE_PORT))
         
         # Wait for reply (Blocking for now, simple)
         sock.settimeout(30.0) # 30 second timeout for Logic (Llama-3 is slow on CPU)
-        data, _ = sock.recvfrom(65535) # Increased from 4096 to avoid WinError 10040
-        return data.decode('utf-8')
+        
+        # [FIX] Race Condition: Filter packets to ensure we only accept from CORE_PORT
+        start_time = time.time()
+        while (time.time() - start_time) < 30.0:
+            try:
+                data, addr_in = sock.recvfrom(65535)
+                # Ignore packets not from Core (e.g. Unity Handshake, Ears)
+                if addr_in[1] != CORE_PORT:
+                     # print(f"[DEBUG] Ignored packet from {addr_in} while waiting for Brain.")
+                     continue
+                return data.decode('utf-8')
+            except socket.timeout:
+                break # Outer timeout handles this
+                
+        return "<ERROR: Logic Brain Timed Out>"
     except socket.timeout:
         return "<ERROR: Logic Brain Timed Out>"
     except Exception as e:
@@ -265,7 +279,33 @@ while True:
                  
              print(f"{C_CORE}[EVENT] Received from Brain: {user_msg}")
              if UNITY_ADDR:
-                  addr = UNITY_ADDR # Redirect reply to User
+                  # [FIX] Async Speech Logic (Late Arrival Handling)
+                  # If we caught this packet here, query_logic_brain missed it (Timeout).
+                  # We must speak it now.
+                  response = user_msg
+                  if "<ERROR" not in response and len(response) > 1:
+                       print(f"{C_SELF}[ASYNC] Vocalizing delayed thought...")
+                       
+                       # Quick TTS
+                       clean_text = re.sub(r'\*.*?\*|<[^>]*>', '', response).strip()
+                       audio_path = os.path.abspath(os.path.join(script_dir, "..", "response.mp3"))
+                       if os.path.exists(audio_path):
+                            try: os.remove(audio_path)
+                            except: pass
+                            
+                       duration = max(4.0, (len(clean_text) / 8.0) + 3.0) 
+                       mute_ears(duration)
+                       
+                       success = tts_engine.generate_audio_sync(clean_text, audio_path)
+                       
+                       if success and os.path.exists(audio_path):
+                            time.sleep(0.3)
+                            # Send Signals
+                            signal = f"[AUDIO] {audio_path}"
+                            sock.sendto(signal.encode('utf-8'), UNITY_ADDR) # To Body
+                            sock.sendto(response.encode('utf-8'), UNITY_ADDR) # Text Bubble
+                            print(f"{C_SYS}[SIGNAL] Sent Async Voice to Body")
+                  continue # [CRITICAL] Do NOT fall through
              else:
                   print(f"{C_ERR}[WARN] Brain wants to speak, but no Body (Unity) connected.")
                   continue # Drop it
@@ -286,8 +326,10 @@ while True:
              continue
         
         # [FIX] Filter System Events from Chat History & Voice
-        # If it's a Log Watcher event, we process it but DO NOT add to history or speak immediately unless critical.
-        is_system_event = user_msg.startswith("[SYSTEM_EVENT")
+        # If it's a Log Watcher event, we IGNORE it for now to prevent Hallucination Loops.
+        if user_msg.startswith("[SYSTEM_EVENT"):
+             print(f"{C_SYS}[LOGS] Suppressed Log Watcher Event to prevent Chat Loop.")
+             continue
 
         # --- 0. Check Feedback ---
         feedback_reply = handle_feedback(user_msg)
@@ -423,9 +465,14 @@ while True:
         print(f"{C_CORE}[THE SELF] Sending structured thought to Core...")
         logic_reply = query_logic_brain(final_query)
         
-        # Fallback if Core is offline
-        if "<ERROR" in logic_reply:
-             response = f"My brain is offline. ({logic_reply})"
+        print(f"{C_CORE}[THE SELF] Received Thought: '{logic_reply}'")
+        
+        if "<ERROR" in logic_reply or not logic_reply.strip():
+             response = "I am listening, but my brain caused an error."
+             print(f"{C_ERR}[WARN] Brain returned error/empty.")
+        elif logic_reply.strip() in ["Connected.", "Unity Connected", "unity connected"]:
+             response = "I am ready and listening."
+             print(f"{C_WARN}[FACE] Filtered 'Connected' Loop Hallucination.")
         else:
              # [PHASE 16: HYBRID BRAIN RESTORATION]
              # logic_reply contains the FACTUAL answer from Llama-3.
@@ -464,7 +511,7 @@ while True:
                   response = "..."
              
         # Update History (Only for real user interactions, not system dumps)
-        if not is_system_event:
+        if not user_msg.startswith("[SYSTEM_EVENT"):
             # [FIX] Double Check: Ensure response isn't a System Event either
             if not response.strip().startswith("[SYSTEM_EVENT") and "Log Watcher" not in response:
                 conversation_history.append(f"User: {user_msg}")
@@ -482,35 +529,25 @@ while True:
         
         # [NEW] Consolidate to Long-Term Memory
         # We save the pair: "User: ... SYNZ: ..."
-        if not is_system_event:
+        if not user_msg.startswith("[SYSTEM_EVENT"):
             brain.remember(f"User: {user_msg}\nSYNZ: {response}")
 
         # --- 4. TTS Generation (Voice) ---
         audio_ready = False
         
         # [FIX] Don't vocalize internal system logs (like error reports), only user interactions
-        # [FIX] Don't vocalize internal system logs (like error reports), only user interactions
-        # ALSO: Block hallucinated system events (where Brain mimics the log watcher)
-        # [FIX] Don't vocalize internal system logs (like error reports), only user interactions
-        # ALSO: Block hallucinated system events (where Brain mimics the log watcher)
+        # ALSO: Block hallucinated system events
         # BUT: Allow [CODE_MENTOR] events because the user wants to be taught fixes.
         
         should_speak = True
-        if is_system_event:
-            # By default, mute system events (Logs, Codes, etc)
-            should_speak = False
-            # Exception: Code Mentor
-            if user_msg.strip().startswith("[CODE_MENTOR]"):
-                 should_speak = True
-                 
         if response.strip().startswith("[SYSTEM_EVENT") or "Log Watcher" in response:
              should_speak = False
 
         if should_speak:
             print(f"{C_SELF}[THE SELF] Vocalizing: '{response}'")
             try:
-                # Clean tags if any (e.g. <SASS>)
-                clean_text = re.sub(r'<[^>]*>', '', response).strip()
+                # Clean tags (<SASS>) and Roleplay Actions (*eyes roll*)
+                clean_text = re.sub(r'\*.*?\*|<[^>]*>', '', response).strip()
                 # Use ABSOLUTE path for Unity to find it easily
                 audio_path = os.path.join(script_dir, "..", "response.mp3") 
                 audio_path = os.path.abspath(audio_path)

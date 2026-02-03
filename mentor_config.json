@@ -1,0 +1,32 @@
+{
+    "watch_paths": [
+        ".",
+        "C:/Users/Adminb/OneDrive/Documents/Projects"
+    ],
+    "allowed_extensions": [
+        ".py",
+        ".cs",
+        ".cpp",
+        ".h",
+        ".c",
+        ".js",
+        ".ts",
+        ".html",
+        ".css",
+        ".java",
+        ".md",
+        ".txt"
+    ],
+    "ignored_dirs": [
+        "venv",
+        ".git",
+        "node_modules",
+        "bin",
+        "obj",
+        "Library",
+        "Build",
+        "dist",
+        "__pycache__",
+        ".vs"
+    ]
+}
