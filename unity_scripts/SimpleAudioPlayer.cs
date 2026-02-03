@@ -65,11 +65,9 @@ public class SimpleAudioPlayer : MonoBehaviour
             eventUrl = path;
         }
 
-        // Debug.Log($"[AudioPlayer] Loading: {eventUrl}"); # Optional Debug
+        // Debug.Log($"[AudioPlayer] Loading: {eventUrl}"); 
 
-        // Debug.Log($"[AudioPlayer] Loading: {eventUrl}"); # Optional Debug
-
-        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(eventUrl, AudioType.MPEG)) # Force MPEG
+        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(eventUrl, AudioType.MPEG)) // Force MPEG
         {
             yield return www.SendWebRequest();
 

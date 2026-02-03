@@ -61,18 +61,94 @@ public class SYNZLive2DController : MonoBehaviour
             if (_cheekParam == null) _cheekParam = _model.Parameters.FindById("PARAM_CHEEK");
         }
         
+        // [FIX] Auto-Remove Buggy Component (Deep Search)
+        var buggyComponent = GetComponentInChildren(System.Type.GetType("Live2D.Cubism.Framework.CubismFadeStateObserver"));
+        // Type.GetType might fail if assembly not loaded. Fallback to string search if possible?
+        // Actually, GetComponent(string) only works on the same GameObject.
+        // Recursive search by name is harder.
+        // Let's stick to user-facing instruction if this fails, OR try to find by type if we can namespace it.
+        // But I don't import the namespace line 2. 
+        // Let's use string Name check on all MonoBehaviours.
+        
+        var allComponents = GetComponentsInChildren<MonoBehaviour>();
+        foreach (var c in allComponents)
+        {
+            if (c != null && c.GetType().Name == "CubismFadeStateObserver")
+            {
+                Debug.LogWarning($"[SYNZ] Removing crashing component: {c.GetType().Name} from {c.gameObject.name}");
+                Destroy(c);
+            }
+        }
+
         ResetBlink();
     }
 
-    // ... (ResetBlink remains same)
+    void ResetBlink()
+    {
+        _blinkTimer = 0f;
+        _isBlinking = false;
+        _nextBlinkTime = Random.Range(2.0f, 6.0f); // Blink every 2-6 seconds
+        _blinkState = 1.0f; // Open
+    }
+
+    void HandleBlinking()
+    {
+        if (_eyeLParam == null || _eyeRParam == null) return;
+
+        _blinkTimer += Time.deltaTime;
+
+        if (!_isBlinking)
+        {
+            if (_blinkTimer >= _nextBlinkTime)
+            {
+                _isBlinking = true;
+                _blinkTimer = 0f;
+            }
+        }
+        else
+        {
+            float t = _blinkTimer / 0.15f; 
+            
+            if (t <= 1.0f) {
+                _blinkState = Mathf.Lerp(1.0f, 0.0f, t);
+            } else if (t <= 2.0f) {
+                _blinkState = Mathf.Lerp(0.0f, 1.0f, t - 1.0f);
+            } else {
+                ResetBlink();
+            }
+
+            _eyeLParam.Value = _blinkState;
+            _eyeRParam.Value = _blinkState;
+        }
+    }
 
     void LateUpdate()
     {
         if (_model == null) return;
 
-        // --- Debug Input ---
-        if (Input.GetKey(KeyCode.M)) { /* ... */ }
-        if (Input.GetKeyDown(KeyCode.J)) TriggerJump(); // Manual Jump Test
+        // --- Debug Input (Supports both Legacy and New Input System) ---
+        bool pressM = false;
+        bool pressJ = false;
+
+#if ENABLE_INPUT_SYSTEM
+        if (UnityEngine.InputSystem.Keyboard.current != null)
+        {
+            pressM = UnityEngine.InputSystem.Keyboard.current.mKey.isPressed;
+            pressJ = UnityEngine.InputSystem.Keyboard.current.jKey.wasPressedThisFrame;
+        }
+#else
+        pressM = Input.GetKey(KeyCode.M);
+        pressJ = Input.GetKeyDown(KeyCode.J);
+#endif
+
+        if (pressM)
+        {
+            if (_mouthOpenParam != null) _mouthOpenParam.Value = 1.0f;
+            if (_mouthFormParam != null) _mouthFormParam.Value = 1.0f; // Force Smile
+            return; // Skip audio logic
+        }
+
+        if (pressJ) TriggerJump();
 
         // ... (Lip Sync & Breathing code remains same) ...
 

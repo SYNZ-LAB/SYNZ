@@ -149,6 +149,12 @@ public class NeuroLinkClient : MonoBehaviour
 
     void PlayAudio(string path)
     {
+        if (string.IsNullOrEmpty(path)) 
+        {
+            Debug.LogWarning("[NeuroLink] Received Empty Audio Path. Ignoring.");
+            return;
+        }
+
         var player = GetComponent<SimpleAudioPlayer>();
         if (player != null)
         {

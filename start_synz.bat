@@ -15,6 +15,9 @@ start "SYNZ Face (Main)" cmd /k "venv\Scripts\python.exe -u TheBrain\face_server
 echo [3/3] Launching Ears (Whisper)...
 start "SYNZ Ears (Mic)" /min cmd /k "venv\Scripts\python.exe -u TheBrain\ears.py"
 
+echo [4/5] Launching Chat Tester (Input)...
+start "SYNZ Chat" cmd /k "venv\Scripts\python.exe -u TheBrain\test_voice_chat.py"
+
 
 
 echo.

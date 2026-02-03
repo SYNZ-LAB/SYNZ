@@ -33,7 +33,7 @@ try:
     print(f"{C_BRAIN}[BRAIN] Loading Llama-3 (This takes a moment)...")
     llm = Llama(
         model_path=MODEL_PATH,
-        n_ctx=2048,
+        n_ctx=8192, # [UPGRADE] Quadrupled Context Limit (Better Memory)
         n_gpu_layers=35, # Attempt GPU offload
         chat_format="llama-3", # [FIX] Force Llama-3 format
         verbose=False
@@ -97,20 +97,44 @@ def check_code():
     
     if not os.path.exists(UNITY_SCRIPTS_PATH): return None
 
-    # Scan .cs files
-    files = glob.glob(os.path.join(UNITY_SCRIPTS_PATH, "*.cs"))
-    for f in files:
-        mtime = os.path.getmtime(f)
-        if f not in file_stamps:
-            file_stamps[f] = mtime
-        elif file_stamps[f] != mtime:
-            file_stamps[f] = mtime
-            print(f"{C_BRAIN}[WATCHER] Code Changed: {os.path.basename(f)}")
-            with open(f, 'r', encoding='utf-8') as code_file:
-                 changes.append(code_file.read())
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+WATCH_EXTENSIONS = {'.cs', '.py', '.cpp', '.h', '.bat', '.cmake', '.txt', '.md'}
+SKIP_DIRS = {'venv', '.git', 'Library', 'Temp', 'Build', 'obj', '__pycache__', '.vs'}
+
+def check_code():
+    changes = []
+    
+    # Recursive Scan from Project Root
+    for root, dirs, files in os.walk(PROJECT_ROOT):
+        # Filter Directories to Skip (modify 'dirs' in-place to stop recursion)
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        
+        for file in files:
+            ext = os.path.splitext(file)[1].lower()
+            if ext in WATCH_EXTENSIONS:
+                full_path = os.path.join(root, file)
+                try:
+                    mtime = os.path.getmtime(full_path)
+                    
+                    if full_path not in file_stamps:
+                        file_stamps[full_path] = mtime
+                    elif file_stamps[full_path] != mtime:
+                        # File Changed!
+                        file_stamps[full_path] = mtime
+                        rel_path = os.path.relpath(full_path, PROJECT_ROOT)
+                        print(f"{C_BRAIN}[WATCHER] Code Changed: {rel_path}")
+                        
+                        # Read specific content (Limit to 2000 chars to avoid token explosion)
+                        with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
+                             content = f.read()
+                             changes.append(f"FILE: {rel_path}\n{content[:5000]}") # 5k char limit per file
+                             
+                except Exception as e:
+                    # File might be locked or deleted during scan
+                    continue
     
     if changes:
-        return "\n".join(changes)
+        return "\n\n".join(changes)
     return None
 
 last_log_pos = 0
@@ -141,7 +165,10 @@ sock.setblocking(False)
 
 FACE_ADDR = (HOST_IP, 8005)
 
+
 print(f"{C_BRAIN}[BRAIN] Logic Core Listening on {CORE_PORT}...")
+MENTOR_MODE = False # [FEATURE] Manual Toggle for Code Mentor
+
 
 while True:
     try:
@@ -150,6 +177,28 @@ while True:
             data, addr = sock.recvfrom(65535) # Increased from 4096 to prevent WinError 10040
             decoded_data = data.decode('utf-8')
             
+
+            # [FIX] Ignore "Ready" loop signals
+            decoded_lower = decoded_data.lower()
+            if "i am ready" in decoded_lower or "i'm ready" in decoded_lower:
+                print(f"{C_BRAIN}[IGNORE] Blocked 'Ready' Loop Signal.")
+                continue
+
+            # [FEATURE] Mentor Mode Toggle
+            if "activate code mentor" in decoded_lower or "enable code mentor" in decoded_lower:
+                MENTOR_MODE = True
+                msg = "[SYSTEM] Code Mentor Activated. I will now review your changes."
+                sock.sendto(msg.encode('utf-8'), addr)
+                print(f"{C_BRAIN}[CMD] Mentor Mode: ON")
+                continue
+            elif "stop code mentor" in decoded_lower or "disable code mentor" in decoded_lower:
+                MENTOR_MODE = False
+                msg = "[SYSTEM] Code Mentor Deactivated."
+                sock.sendto(msg.encode('utf-8'), addr)
+                print(f"{C_BRAIN}[CMD] Mentor Mode: OFF")
+                continue
+
+
             messages = []
             
             # [FIX] Try to parse as JSON first (Structured Chat)
@@ -187,10 +236,22 @@ while True:
             )
             response = output['choices'][0]['message']['content']
             
+            # [FIX] Clean Generation Artifacts
+            # Llama-3 sometimes includes the speaker label in the output
+            if response.startswith("SYNZ:"): response = response[5:].strip()
+            elif response.startswith("Assistant:"): response = response[10:].strip()
+            elif response.startswith("User:"): response = response[5:].strip() # Hallucinating user turn
+            
             # [FIX] Anti-Parrot Guard
             # If Model just repeats the User, we intercept it.
-            last_user_input = messages[-1]['content'].strip().lower()
-            if response.strip().lower() == last_user_input:
+            # We use 'raw_user' from packet if available, otherwise fallback to messages[-1]
+            check_against = ""
+            if "raw_user" in packet:
+                check_against = packet["raw_user"].strip().lower()
+            else:
+                check_against = messages[-1]['content'].strip().lower()
+
+            if response.strip().lower() == check_against:
                 print(f"{C_ERR}[GUARD] Blocked Parrot Response ('{response}'). forcing fallback.")
                 response = "I am SYNZ. I am listening."
             elif response.strip() == "":
@@ -203,16 +264,25 @@ while True:
         except BlockingIOError:
             pass
 
-        # B. Check Code
-        code_diff = check_code()
-        if code_diff:
-            prompt = f"REVIEW THIS CODE:\n{code_diff}\nIdentify any bugs briefly."
-            output = llm.create_chat_completion(messages=[{"role": "user", "content": prompt}])
-            feedback = output['choices'][0]['message']['content']
-            print(f"{C_BRAIN}[SENTINEL] {feedback}")
-            # Send to Face (who will speak it)
-            msg = f"[SYSTEM_EVENT: Code Watcher]: {feedback}"
-            sock.sendto(msg.encode('utf-8'), FACE_ADDR)
+        if MENTOR_MODE:
+            code_diff = check_code()
+            if code_diff:
+                # [UPGRADE] Mentor Mode Prompt (Helpful Edition)
+                prompt = (
+                    f"You are a Senior Developer. The user just updated this code:\n"
+                    f"{code_diff}\n\n"
+                    f"1. Briefly explain what changed.\n"
+                    f"2. If there are bugs, teach the user how to fix them.\n"
+                    f"3. If it looks good, give a quick compliment.\n"
+                    f"Keep it short and helpful."
+                )
+                output = llm.create_chat_completion(messages=[{"role": "user", "content": prompt}])
+                feedback = output['choices'][0]['message']['content']
+                print(f"{C_BRAIN}[MENTOR] {feedback[:50]}...")
+                
+                # Send to Face (Use unique tag so we can whitelist it for TTS)
+                msg = f"[CODE_MENTOR]: {feedback}"
+                sock.sendto(msg.encode('utf-8'), FACE_ADDR)
 
         # C. Check Logs (Smart Sentinel)
         logs = check_logs()

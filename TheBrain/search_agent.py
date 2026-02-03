@@ -10,7 +10,8 @@ class SearchAgent:
         '''
         print(f"[Search] Googling: '{query}'...")
         try: 
-            results = self.ddgs.text(query, max_results = max_results)
+            # [FIX] Force English/World region to avoid localized (e.g. Chinese) results for English queries
+            results = self.ddgs.text(query, region='wt-wt', max_results=max_results)
             if not results:
                 return "No results found."
 

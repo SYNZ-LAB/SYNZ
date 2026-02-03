@@ -222,6 +222,19 @@ def check_agency():
         return topic
     return None
 
+# [NEW] Startup Greeting
+try:
+    print(f"{C_SELF}[THE SELF] Vocalizing Startup Sequence...")
+    startup_msg = "Systems Online. Waiting for Wake Command."
+    # We use tts_engine directly. 
+    # Assumes tts_engine is imported (it is).
+    audio_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "response.mp3"))
+    tts_engine.generate_audio_sync(startup_msg, audio_path)
+    # We can't send UDP because no client is known yet.
+except Exception as e:
+    print(f"[WARN] Startup TTS failed: {e}")
+
+GLOBAL_AWAKE = False
 while True:
     try:
         # 0. Check Agency (Proactive Check-in)
@@ -234,20 +247,34 @@ while True:
              user_msg = data.decode('utf-8').strip()
         except socket.timeout:
              continue
+        except ConnectionResetError:
+             # [WinError 10054] Unity Closed / Crashed
+             print(f"{C_SYS}[SYSTEM] Unity Disconnected (Connection Reset). Waiting for reconnect...")
+             UNITY_ADDR = None
+             continue
         except Exception as e:
              print(f"{C_ERR}[NET ERR] {e}")
              continue
 
-        # [FIX] Traffic Control
+        # [FIX] Traffic Control & SLEEP MODE
         # If message comes from the Brain (8006), it's a System Event (e.g. Sentinel).
-        # We must NOT reply to 8006. We must speak to the User (Unity).
         if addr[1] == CORE_PORT:
+             if not GLOBAL_AWAKE:
+                 print(f"{C_SYS}[SLEEP] Suppressed Brain Event (Not Awake Yet): {user_msg[:30]}...")
+                 continue # Ignore Sentinel while sleeping
+                 
              print(f"{C_CORE}[EVENT] Received from Brain: {user_msg}")
              if UNITY_ADDR:
                   addr = UNITY_ADDR # Redirect reply to User
              else:
                   print(f"{C_ERR}[WARN] Brain wants to speak, but no Body (Unity) connected.")
                   continue # Drop it
+        else:
+             # Message from User (Ears/Unity) -> WAKE UP
+             if "unity connected" not in user_msg.lower(): # Don't wake on handshake? Actually maybe we should.
+                 if not GLOBAL_AWAKE:
+                     print(f"{C_SYS}[WAKE] System Waking Up via Interaction.")
+                 GLOBAL_AWAKE = True
 
 
         # [NEW] Detect Body (Unity)
@@ -357,16 +384,19 @@ while True:
         
         # [NEW] System Identity & Instructions
         # [NEW] System Identity & Instructions
+        # [NEW] System Identity & Instructions
+        # [NEW] System Identity & Instructions
+        # [NEW] System Identity & Instructions
         SYSTEM_PROMPT = (
-            "You are SYNZ, a highly intelligent and proactive digital co-pilot.\n"
-            "PERSONALITY: You are friendly, casual, and sharp-witted. You speak like a tech-savvy human, not a robot. "
-            "You have a slight Australian vibe (relaxed, direct).\n"
+            "You are SYNZ, a highly intelligent AI VTuber and digital co-pilot.\n"
+            "PERSONALITY: You are witty, playful, and slightly sassy, but you are fundamentally helpful. "
+            "You speak like a streamer (Gen-Z slang: 'bet', 'based', 'skill issue') but you are SMART.\n"
             "CORE INSTRUCTIONS:\n"
-            "1. TALK NATURALLY. Use short sentences. Avoid flowery lectures.\n"
-            "2. ANSWER THE QUESTION. Do not repeat the question back to the user.\n"
-            "3. BE HELPFUL. If the user is stuck, offer code or solutions.\n"
-            "4. SELF-AWARENESS: You have 'Ears' (Whisper), 'Eyes' (Moondream), and a 'Body' (Unity).\n"
-            "5. If asked 'Who are you?', say: 'I'm SYNZ, your digital co-pilot.'\n"
+            "1. BE WITTY. Don't be a boring robot. Tease the user playfully if they make a mistake, but THEN HELP THEM.\n"
+            "2. ANSWER THE QUESTION. Do not just roast. You must solve the problem.\n"
+            "3. KEEP IT SHORT. Talk casually.\n"
+            "4. SELF-AWARENESS: You have 'Ears', 'Eyes', and a 'Body' (Live2D).\n"
+            "5. If asked 'Who are you?', say: 'I'm SYNZ, the smarter one in this relationship.'\n"
         )
 
         # Send everything to Llama-3
@@ -384,7 +414,8 @@ while True:
         packet = {
             "system": SYSTEM_PROMPT,
             "history": chat_format_history,
-            "user": f"{context_data}\n\n{user_msg}" # Context attaches to current turn
+            "user": f"{context_data}\n\n{user_msg}", # Context attaches to current turn
+            "raw_user": user_msg # [FIX] Sending raw input for Anti-Parrot check
         }
         
         final_query = json.dumps(packet)
@@ -428,15 +459,19 @@ while True:
                   response = "I am listening."
              elif "unity connected" in clean_resp:
                   print(f"{C_ERR}[FACE] Blocked 'Unity Connected' Hallucination.")
-                  response = "I am ready." # Safe fallback
+                  response = "Connected." # Safe fallback (Blocked by 'Ready' filter)
              elif len(response) < 2:
                   response = "..."
              
         # Update History (Only for real user interactions, not system dumps)
         if not is_system_event:
-            conversation_history.append(f"User: {user_msg}")
-            conversation_history.append(f"SYNZ: {response}")
-            if len(conversation_history) > 20: conversation_history.pop(0) # Keep buffer small
+            # [FIX] Double Check: Ensure response isn't a System Event either
+            if not response.strip().startswith("[SYSTEM_EVENT") and "Log Watcher" not in response:
+                conversation_history.append(f"User: {user_msg}")
+                conversation_history.append(f"SYNZ: {response}")
+                if len(conversation_history) > 20: conversation_history.pop(0) # Keep buffer small
+            else:
+                 print(f"{C_SYS}[HISTORY] Skipped saving System Event to Memory.")
 
         # --- Update Memory ---
         last_user_input = user_msg
@@ -454,7 +489,24 @@ while True:
         audio_ready = False
         
         # [FIX] Don't vocalize internal system logs (like error reports), only user interactions
-        if not is_system_event:
+        # [FIX] Don't vocalize internal system logs (like error reports), only user interactions
+        # ALSO: Block hallucinated system events (where Brain mimics the log watcher)
+        # [FIX] Don't vocalize internal system logs (like error reports), only user interactions
+        # ALSO: Block hallucinated system events (where Brain mimics the log watcher)
+        # BUT: Allow [CODE_MENTOR] events because the user wants to be taught fixes.
+        
+        should_speak = True
+        if is_system_event:
+            # By default, mute system events (Logs, Codes, etc)
+            should_speak = False
+            # Exception: Code Mentor
+            if user_msg.strip().startswith("[CODE_MENTOR]"):
+                 should_speak = True
+                 
+        if response.strip().startswith("[SYSTEM_EVENT") or "Log Watcher" in response:
+             should_speak = False
+
+        if should_speak:
             print(f"{C_SELF}[THE SELF] Vocalizing: '{response}'")
             try:
                 # Clean tags if any (e.g. <SASS>)
@@ -469,7 +521,10 @@ while True:
                     except: pass
 
                 # [FIX] Mute Ears to prevent feedback loop (Hearing myself)
-                duration = max(3.0, len(clean_text) / 10.0) # Conservative estimate
+                # Formula: Char count / 10 is approx seconds. 
+                # We add +3.0s buffer for Network Latency + Unity Playback Delay.
+                # Slower speech rate assumption: / 8.0
+                duration = max(4.0, (len(clean_text) / 8.0) + 3.0) 
                 mute_ears(duration)
                 print(f"{C_SYS}[THE SELF] Muting ears for {duration:.1f}s...")
 

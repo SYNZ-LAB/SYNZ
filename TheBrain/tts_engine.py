@@ -27,8 +27,11 @@ def generate_audio_sync(text, filename):
     """Synchronous wrapper for Face Server."""
     try:
         if sys.platform == "win32":
-            # Policy fix for Windows
-            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+            # Policy fix for Windows (Suppress warnings)
+            import warnings
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", category=DeprecationWarning)
+                asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
             
         asyncio.run(generate_voice(text, filename))
         return True
