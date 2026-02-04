@@ -41,7 +41,15 @@ public class SYNZLive2DController : MonoBehaviour
         // ... (Parameter finding code remains the same) ...
         if (_model != null)
         {
-            Debug.Log("[Live2D] Scanning Model Parameters...");
+            Debug.Log($"[Live2D] Scanning Model Parameters for '{_model.name}'...");
+            Debug.Log($"[VISIBILITY] Pos: {transform.position}, Scale: {transform.localScale}, Layer: {gameObject.layer}");
+            Debug.Log($"[VISIBILITY] Camera Pos: {Camera.main.transform.position}, Size: {Camera.main.orthographicSize}");
+            
+            // Force reasonable defaults if broken
+            if (transform.localScale.x < 0.01f) {
+                Debug.LogWarning("[FIX] Scale was too small! Resetting to 1.0");
+                transform.localScale = Vector3.one;
+            }
             _mouthOpenParam = _model.Parameters.FindById("ParamMouthOpenY");
             if (_mouthOpenParam == null) _mouthOpenParam = _model.Parameters.FindById("PARAM_MOUTH_OPEN_Y");
             if (_mouthOpenParam == null) _mouthOpenParam = _model.Parameters.FindById("ParamMouthOpen");

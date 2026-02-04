@@ -38,8 +38,16 @@ def mute_ears(seconds=5.0):
     except:
         pass
 
-# Paths
-script_dir = os.path.dirname(os.path.abspath(__file__))
+# Paths (Support PyInstaller)
+import sys
+if getattr(sys, 'frozen', False):
+    script_dir = os.path.dirname(sys.executable)
+    # OneDir support
+    if os.path.exists(os.path.join(script_dir, "..", "models")):
+        script_dir = os.path.dirname(script_dir)
+else:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
 training_file_path = os.path.join(script_dir, "data", "training_data.txt")
 
 # The Body (Unity)

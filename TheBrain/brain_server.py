@@ -11,9 +11,21 @@ import threading
 HOST_IP = "127.0.0.1"
 CORE_PORT = 8006
 
-# Resolve paths relative to THIS script (TheBrain/brain_server.py)
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(SCRIPT_DIR) # Go up to SYNZ root
+import sys
+
+# Resolve Paths (Support PyInstaller)
+if getattr(sys, 'frozen', False):
+    # Running as compiled EXE
+    SCRIPT_DIR = os.path.dirname(sys.executable)
+    # Check if we are in OneDir mode (dist/brain/brain.exe) -> Models in ../models
+    if os.path.exists(os.path.join(SCRIPT_DIR, "..", "models")):
+        PROJECT_ROOT = os.path.dirname(SCRIPT_DIR) # Go up
+    else:
+        PROJECT_ROOT = SCRIPT_DIR # OneFile mode
+else:
+    # Running as Script
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    PROJECT_ROOT = os.path.dirname(SCRIPT_DIR) # Go up to SYNZ root
 
 MODEL_PATH = os.path.join(PROJECT_ROOT, "models", "Llama-3.1-8B-Instruct-Q6_K.gguf")
 UNITY_SCRIPTS_PATH = os.path.join(PROJECT_ROOT, "unity_scripts")

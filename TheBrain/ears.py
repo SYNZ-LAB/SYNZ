@@ -16,8 +16,33 @@ BLOCK_SIZE = 4000
 THRESHOLD = 0.01 # [TUNED] Reverted to 0.01 to avoid fan noise
 SILENCE_DURATION = 0.8 # [TUNED] Increased slightly to prevent chopping
 
-print("[EARS] Loading Model 'small.en' for high accuracy... (This may take a moment)")
-model = whisper.load_model("small.en") # [UPGRADE] Base -> Small (Cleaner STT)
+# --- Paths & Model ---
+import sys
+import os
+
+if getattr(sys, 'frozen', False):
+    SCRIPT_DIR = os.path.dirname(sys.executable)
+    # OneDir support (dist/ears/ears.exe -> ../models)
+    if os.path.exists(os.path.join(SCRIPT_DIR, "..", "models")):
+        SCRIPT_DIR = os.path.dirname(SCRIPT_DIR)
+    # PyInstaller Bundle Root
+else:
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR) # Only valid if script is in TheBrain/. Adjust for logic.
+# Actually, if in TheBrain/ears.py, root is ../
+# But if frozen, SCRIPT_DIR is the dist folder where we put models.
+# So we assume 'models' is next to executable.
+
+LOCAL_MODEL_PATH = os.path.join(SCRIPT_DIR, "models", "small.en.pt")
+
+print("[EARS] Loading Model...")
+if os.path.exists(LOCAL_MODEL_PATH):
+    print(f"[EARS] Found local model: {LOCAL_MODEL_PATH}")
+    model = whisper.load_model(LOCAL_MODEL_PATH)
+else:
+    print("[EARS] Local model not found. Downloading 'small.en'...")
+    model = whisper.load_model("small.en")
 print("[EARS] Model Loaded. Listening...")
 winsound.Beep(1000, 200) # [NEW] Startup Chime (High Pitch)
 winsound.Beep(1500, 200)
