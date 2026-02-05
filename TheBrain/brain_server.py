@@ -46,7 +46,7 @@ try:
     llm = Llama(
         model_path=MODEL_PATH,
         n_ctx=8192, # [UPGRADE] Quadrupled Context Limit (Better Memory)
-        n_gpu_layers=35, # Attempt GPU offload
+        n_gpu_layers=-1, # [OPT] Auto-detect Max GPU Layers (Speed)
         chat_format="llama-3", # [FIX] Force Llama-3 format
         verbose=False
     )

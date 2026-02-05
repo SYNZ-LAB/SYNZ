@@ -552,6 +552,16 @@ while True:
              should_speak = False
 
         if should_speak:
+            # [FIX] Interruption Logic
+            # Check if user spoke AGAIN while we were thinking (UDP Buffer has data)
+            import select
+            try:
+                ready_to_read, _, _ = select.select([sock], [], [], 0)
+                if ready_to_read:
+                    print(f"{C_SELF}[INTERRUPT] New input detected! Skipping speech for: '{response[:20]}...'")
+                    continue # Skip TTS, loop back to read new input
+            except: pass
+
             print(f"{C_SELF}[THE SELF] Vocalizing: '{response}'")
             try:
                 # Clean tags (<SASS>) and Roleplay Actions (*eyes roll*)

@@ -13,8 +13,8 @@ HOST_IP = "127.0.0.1"
 HOST_PORT = 8005
 SAMPLE_RATE = 16000
 BLOCK_SIZE = 4000 
-THRESHOLD = 0.01 # [TUNED] Reverted to 0.01 to avoid fan noise
-SILENCE_DURATION = 0.8 # [TUNED] Increased slightly to prevent chopping
+THRESHOLD = 0.01 
+SILENCE_DURATION = 0.6 # [OPT] Reduced for snappier response (was 0.8)
 
 # --- Paths & Model ---
 import sys
@@ -34,15 +34,15 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR) # Only valid if script is in TheBrain
 # But if frozen, SCRIPT_DIR is the dist folder where we put models.
 # So we assume 'models' is next to executable.
 
-LOCAL_MODEL_PATH = os.path.join(SCRIPT_DIR, "models", "small.en.pt")
+LOCAL_MODEL_PATH = os.path.join(SCRIPT_DIR, "models", "base.en.pt")
 
 print("[EARS] Loading Model...")
 if os.path.exists(LOCAL_MODEL_PATH):
     print(f"[EARS] Found local model: {LOCAL_MODEL_PATH}")
     model = whisper.load_model(LOCAL_MODEL_PATH)
 else:
-    print("[EARS] Local model not found. Downloading 'small.en'...")
-    model = whisper.load_model("small.en")
+    print("[EARS] Local model not found. Downloading 'base.en' (Faster)...")
+    model = whisper.load_model("base.en")
 print("[EARS] Model Loaded. Listening...")
 winsound.Beep(1000, 200) # [NEW] Startup Chime (High Pitch)
 winsound.Beep(1500, 200)
