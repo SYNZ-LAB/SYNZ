@@ -4,17 +4,17 @@ SYNZ is a fully autonomous **Digital Human Co-Pilot** capable of seeing, hearing
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-*   **🧠 Local Intelligence**: Powered by **Llama-3 (8B)** running locally. No API fees, no data leaks.
-*   **👩‍🏫 Code Mentor Mode**: Watches your file system in real-time. If you save a file with bugs, she will **speak up and teach you the fix**.
-*   **🎙️ Smart Voice**: Real-time STT (Whisper) with "Voice Hardening" to ignore keyboard clicks and silence hallucinations.
-*   **💅 Hybrid Personality**: Witty, Sassy, and slightly chaotic (like a streamer), but fundamentally **Helpful** and smart.
-*   **👀 Vision**: Can "See" your screen (monitor 1) and analyze UI/Code.
+*   **Local Intelligence**: Powered by **Llama-3 (8B)** running locally. No API fees, no data leaks.
+*   **Code Mentor Mode**: Watches your file system in real-time. If you save a file with bugs, she will **speak up and teach you the fix**.
+*   **Smart Voice**: Real-time STT (Whisper) with "Voice Hardening" to ignore keyboard clicks and silence hallucinations.
+*   **Hybrid Personality**: Witty, Sassy, and slightly chaotic (like a streamer), but fundamentally **Helpful** and smart.
+*   **Vision**: Can "See" your screen (monitor 1) and analyze UI/Code.
 
 ---
 
-## 🏗️ Architecture (How It Works)
+## Architecture (How It Works)
 
 SYNZ is a **Distributed System** spanning multiple processes:
 
@@ -36,9 +36,9 @@ SYNZ is a **Distributed System** spanning multiple processes:
 
 ---
 
-## 📦 Downloads (Portable)
+## Downloads (Portable)
 Latest Build (v2 Portable):
-[⬇️ Download SYNZ v2 (Google Drive)](https://drive.google.com/drive/folders/1F3bIvhgb6Wjz1-wFOxboF9VqlYGhNpHA)
+[Download SYNZ v2 (Google Drive)](https://drive.google.com/drive/folders/1F3bIvhgb6Wjz1-wFOxboF9VqlYGhNpHA)
 
 *   **Size**: ~7.2 GB
 *   **Requirements**: Windows 10/11, NVIDIA GPU (Drivers Installed).
@@ -46,7 +46,7 @@ Latest Build (v2 Portable):
 
 ---
 
-## 🛠️ Installation Guide
+## Installation Guide
 
 ### Prerequisites
 1.  **Python 3.10+**
@@ -62,12 +62,12 @@ Latest Build (v2 Portable):
 
 ---
 
-## ▶️ How to Run
+## How to Run
 
 ### 1. Launch the Mind
 Double-click **`start_synz.bat`**.
 *   This opens 3 terminals (Brain, Face, Ears).
-*   Wait for the **Double Beep** tone. 🎵
+*   Wait for the **Double Beep** tone.
 *   Wait for "Systems Online" voice message.
 
 ### 2. Launch the Body
@@ -77,7 +77,7 @@ Double-click **`start_synz.bat`**.
 
 ---
 
-## 🎮 Controls & Commands
+## Controls & Commands
 
 ### Voice Commands
 *   **Wake Up**: "SYNZ" (or "Sins"). -> She listens for 30s.
@@ -94,7 +94,7 @@ If you don't want to talk, you can test text responses:
 
 ---
 
-## ❓ Troubleshooting
+## Troubleshooting
 
 **Q: She echoes herself / Hears herself speak?**
 A: This is fixed in the latest update (Socket Port 8009). Ensure `start_synz.bat` was restarted to load the new `ears.py`.
