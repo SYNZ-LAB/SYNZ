@@ -36,6 +36,16 @@ SYNZ is a **Distributed System** spanning multiple processes:
 
 ---
 
+## 📦 Downloads (Portable)
+Latest Build (v2 Portable):
+[⬇️ Download SYNZ v2 (Google Drive)](https://drive.google.com/drive/folders/1F3bIvhgb6Wjz1-wFOxboF9VqlYGhNpHA)
+
+*   **Size**: ~7.2 GB
+*   **Requirements**: Windows 10/11, NVIDIA GPU (Drivers Installed).
+*   **Portable**: Works on any machine (CUDA 13.x drivers bundled).
+
+---
+
 ## 🛠️ Installation Guide
 
 ### Prerequisites
