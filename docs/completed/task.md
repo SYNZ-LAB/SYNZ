@@ -99,3 +99,9 @@
         - [x] Integrate Recall (Before Generation)
         - [x] Integrate Consolidation (After Generation)
 
+
+- [x] **Phase 16: Distribution (Hardening)** <!-- id: 140 -->
+    - [x] **OneDir Compilation** (PyInstaller)
+    - [x] **Hybrid Hardware Support** (Python 3.14 + CUDA 13.x Fix)
+    - [x] **Portability** (Bundled Drivers & Audio)
+    - [x] **Packaging** (Fast Zip / v2 Portable)
