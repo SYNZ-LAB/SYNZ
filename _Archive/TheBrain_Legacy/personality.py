@@ -1,6 +1,6 @@
-import json
-import os
-import time
+import json  # type: ignore
+import os  # type: ignore
+import time  # type: ignore
 
 class PersonalityManager:
     def __init__(self, config_path="TheBrain/personality_config.json"):

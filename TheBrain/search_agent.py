@@ -1,4 +1,4 @@
-from duckduckgo_search import DDGS 
+from duckduckgo_search import DDGS  # type: ignore
 
 class SearchAgent:
     def __init__(self):

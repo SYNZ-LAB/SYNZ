@@ -1,6 +1,6 @@
-import socket
-import json
-import time
+import socket  # type: ignore
+import json  # type: ignore
+import time  # type: ignore
 
 BRAIN_PORT = 5005
 

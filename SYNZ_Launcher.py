@@ -1,11 +1,11 @@
 
-import subprocess
-import time
-import os
-import signal
-import sys
-import threading
-from colorama import init, Fore, Style
+import subprocess  # type: ignore
+import time  # type: ignore
+import os  # type: ignore
+import signal  # type: ignore
+import sys  # type: ignore
+import threading  # type: ignore
+from colorama import init, Fore, Style  # type: ignore
 
 init(autoreset=True)
 

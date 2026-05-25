@@ -1,9 +1,9 @@
-import socket
-import json
-import torch
-from model import LilithConfig, LilithModel
-from tokenizer import get_tokenizer
-from personality import PersonalityManager
+import socket  # type: ignore
+import json  # type: ignore
+import torch  # type: ignore
+from model import LilithConfig, LilithModel  # type: ignore
+from tokenizer import get_tokenizer  # type: ignore
+from personality import PersonalityManager  # type: ignore
 
 # Configuration
 WATCHER_PORT = 5005 # Receives from The Watcher

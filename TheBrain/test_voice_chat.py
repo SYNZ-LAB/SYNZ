@@ -1,7 +1,7 @@
-import socket
-import time
-import os
-import threading
+import socket  # type: ignore
+import time  # type: ignore
+import os  # type: ignore
+import threading  # type: ignore
 
 # Configuration
 FACE_IP = "127.0.0.1"

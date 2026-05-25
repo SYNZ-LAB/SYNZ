@@ -1,17 +1,17 @@
-import json
-import socket
-import time
-import os
-import glob
-from llama_cpp import Llama
-import win32pipe, win32file, pywintypes
-import threading
+import json  # type: ignore
+import socket  # type: ignore
+import time  # type: ignore
+import os  # type: ignore
+import glob  # type: ignore
+from llama_cpp import Llama  # type: ignore
+import win32pipe, win32file, pywintypes  # type: ignore
+import threading  # type: ignore
 
 # --- Config ---
 HOST_IP = "127.0.0.1"
 CORE_PORT = 8006
 
-import sys
+import sys  # type: ignore
 
 # Resolve Paths (Support PyInstaller)
 if getattr(sys, 'frozen', False):
@@ -33,7 +33,7 @@ UNITY_LOG_PATH = os.path.expandvars(r"%LOCALAPPDATA%\Unity\Editor\Editor.log")
 PIPE_NAME = r'\\.\pipe\SYNZ_NeuroLink'
 
 # Colors
-from colorama import init, Fore
+from colorama import init, Fore  # type: ignore
 init(autoreset=True)
 C_BRAIN = Fore.MAGENTA
 C_ERR = Fore.RED
@@ -107,8 +107,8 @@ CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "men
 # Default Config (Fallback)
 WATCH_CONFIG = {
     "watch_paths": [os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))],
-    "allowed_extensions": ['.cs', '.py', '.cpp', '.h', '.bat', '.cmake', '.txt'],
-    "ignored_dirs": ['venv', '.git', 'Library', 'Temp', 'Build', 'obj', '__pycache__', '.vs']
+    "allowed_extensions": {'.cs', '.py', '.cpp', '.h', '.bat', '.cmake', '.txt'},
+    "ignored_dirs": {'venv', '.git', 'Library', 'Temp', 'Build', 'obj', '__pycache__', '.vs'}
 }
 
 # Load Config
@@ -137,7 +137,7 @@ def check_code():
 
         for root, dirs, files in os.walk(base_path):
             # Filter Directories (Modify in-place)
-            dirs[:] = [d for d in dirs if d not in WATCH_CONFIG["ignored_dirs"]]
+            dirs[:] = [d for d in dirs if d not in WATCH_CONFIG["ignored_dirs"]]  # type: ignore
             
             for file in files:
                 ext = os.path.splitext(file)[1].lower()
@@ -157,7 +157,7 @@ def check_code():
                             # Read content
                             with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
                                  content = f.read()
-                                 changes.append(f"FILE: {full_path}\n{content[:5000]}")
+                                 changes.append(f"FILE: {full_path}\n{content[:5000]}")  # type: ignore
                                  
                     except Exception:
                         continue
@@ -229,6 +229,7 @@ while True:
 
 
             messages = []
+            packet = {}
             
             # [FIX] Try to parse as JSON first (Structured Chat)
             try:
@@ -256,12 +257,17 @@ while True:
             
             # Inference
             # Inference
+            if llm is None:
+                print(f"{C_ERR}[CRASH] Model not loaded. Cannot process request.")
+                sock.sendto(b"Model Offline", addr)
+                continue
+
             last_msg_content = messages[-1]['content'] if messages else "???"
             # Clean up newlines for log readability
-            readable_msg = last_msg_content.replace('\n', ' ')[:80] 
+            readable_msg = last_msg_content.replace('\n', ' ')[:80]  # type: ignore
             print(f"{C_BRAIN}[REQ] User: '{readable_msg}...' (Hist: {len(messages)})")
             # print(f"{C_BRAIN}[DEBUG] Full Context Sent.") # Disabled for readability
-            output = llm.create_chat_completion(
+            output = llm.create_chat_completion(  # type: ignore
                 messages=messages, # [FIX] Restored missing argument
                 temperature=0.7,
                 top_p=0.9,
@@ -300,7 +306,7 @@ while True:
 
         if MENTOR_MODE:
             code_diff = check_code()
-            if code_diff:
+            if code_diff and llm is not None:
                 # [UPGRADE] Mentor Mode Prompt (Helpful Edition)
                 prompt = (
                     f"You are a Senior Developer. The user just updated this code:\n"
@@ -310,7 +316,7 @@ while True:
                     f"3. If it looks good, give a quick compliment.\n"
                     f"Keep it short and helpful."
                 )
-                output = llm.create_chat_completion(messages=[{"role": "user", "content": prompt}])
+                output = llm.create_chat_completion(messages=[{"role": "user", "content": prompt}])  # type: ignore
                 feedback = output['choices'][0]['message']['content']
                 print(f"{C_BRAIN}[MENTOR] {feedback[:50]}...")
                 
@@ -320,7 +326,7 @@ while True:
 
         # C. Check Logs (Smart Sentinel)
         logs = check_logs()
-        if logs and ("Error" in logs or "Exception" in logs):
+        if logs and ("Error" in logs or "Exception" in logs) and llm is not None:
              # [FIX] Anti-Spam: Don't report the exact same log chunk twice
              # We rely on 'check_logs' returning new data, but if the error implies a generic state...
              # Actually check_logs output is already diff-based? 
@@ -333,13 +339,13 @@ while True:
              # If Unity spams 1000 lines of NullRef, we get a huge chunk.
              
              # Truncate to last 1000 chars to save tokens
-             log_snippet = logs[-1000:]
+             log_snippet = logs[-1000:]  # type: ignore
              
              print(f"{C_BRAIN}[SENTINEL] analyzing new errors...")
              prompt = f"Analyze this UNITY LOG ERROR concisely:\n{log_snippet}\nExplain what is broken."
              
              try:
-                 output = llm.create_chat_completion(
+                 output = llm.create_chat_completion(  # type: ignore
                      messages=[{"role": "user", "content": prompt}],
                      max_tokens=100, # Keep it short
                      temperature=0.5

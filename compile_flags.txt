@@ -1,0 +1,4 @@
+-std=c++17
+-Ibuild/_deps/llama_cpp-src/include
+-Ibuild/_deps/llama_cpp-src/ggml/include
+-Ibuild/_deps/llama_cpp-src/ggml/src

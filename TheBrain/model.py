@@ -1,7 +1,7 @@
 # 🧠 NanoSYNZ Model Definition (Complete)
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
+import torch  # type: ignore
+import torch.nn as nn  # type: ignore
+from torch.nn import functional as F  # type: ignore
 
 class Head(nn.Module):
     """ one head of self-attention """

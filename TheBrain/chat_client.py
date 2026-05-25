@@ -1,6 +1,6 @@
-import socket
-import sys
-import time
+import socket  # type: ignore
+import sys  # type: ignore
+import time  # type: ignore
 
 HOST_IP = "127.0.0.1"
 HOST_PORT = 8005

@@ -1,16 +1,16 @@
-import json
-import socket
-import struct
-import time
-import re
-from model import NanoSYNZ
-import torch
-import os
-import tts_engine # [NEW] Voice Module
-from search_agent import SearchAgent # [NEW] The Internet Eyes
+import json  # type: ignore
+import socket  # type: ignore
+import struct  # type: ignore
+import time  # type: ignore
+import re  # type: ignore
+from model import NanoSYNZ  # type: ignore
+import torch  # type: ignore
+import os  # type: ignore
+import tts_engine # [NEW] Voice Module  # type: ignore
+from search_agent import SearchAgent # [NEW] The Internet Eyes  # type: ignore
 
 # [NEW] QoL: Colors
-from colorama import init, Fore, Style
+from colorama import init, Fore, Style  # type: ignore
 init(autoreset=True)
 C_SELF = Fore.GREEN
 C_USER = Fore.CYAN
@@ -39,7 +39,7 @@ def mute_ears(seconds=5.0):
         pass
 
 # Paths (Support PyInstaller)
-import sys
+import sys  # type: ignore
 if getattr(sys, 'frozen', False):
     script_dir = os.path.dirname(sys.executable)
     # OneDir support
@@ -63,7 +63,7 @@ print(f"[THE SELF] Awakening on {HOST_IP}:{FACE_PORT}...")
 device = 'cpu'
 
 # (Moving Meta Load UP to here to get vocab_size)
-import pickle
+import pickle  # type: ignore
 try:
     with open(os.path.join(script_dir, 'meta.pkl'), 'rb') as f:
         meta = pickle.load(f)
@@ -97,17 +97,17 @@ model.eval()
 print("[THE SELF] Connecting to the Global Network...")
 searcher = SearchAgent()
 
-from memory_agent import MemoryAgent # [NEW] The Hippocampus
+from memory_agent import MemoryAgent # [NEW] The Hippocampus  # type: ignore
 brain = MemoryAgent() 
 
 # [NEW] Phase 15: The Hands
-from editor_agent import EditorAgent
+from editor_agent import EditorAgent  # type: ignore
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # Go up one level from 'TheBrain'
 hands = EditorAgent(root_dir=project_root)
 
 # [NEW] Phase 12: Vision
 try:
-    from sight import SightAgent
+    from sight import SightAgent  # type: ignore
     eyes = SightAgent()
 except ImportError:
     print("[THE SELF] Vision Module disabled (Missing dependencies).")
@@ -218,7 +218,7 @@ def handle_feedback(user_msg):
 UNITY_ADDR = None
 
 # --- [NEW] Phase 14: Agency (The Watcher) ---
-import random
+import random  # type: ignore
 last_interaction = time.time()
 AGENCY_THRESHOLD = 600 # 10 Minutes (Test with 30s if you want)
 proactive_triggers = [
@@ -554,7 +554,7 @@ while True:
         if should_speak:
             # [FIX] Interruption Logic
             # Check if user spoke AGAIN while we were thinking (UDP Buffer has data)
-            import select
+            import select  # type: ignore
             try:
                 ready_to_read, _, _ = select.select([sock], [], [], 0)
                 if ready_to_read:

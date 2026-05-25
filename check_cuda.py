@@ -1,8 +1,8 @@
 
-import torch
-import sys
+import torch  # type: ignore
+import sys  # type: ignore
 try:
-    from llama_cpp import Llama
+    from llama_cpp import Llama  # type: ignore
     HAS_LLAMA = True
 except ImportError:
     HAS_LLAMA = False

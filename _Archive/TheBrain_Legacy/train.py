@@ -1,10 +1,10 @@
-import os
-import time
-import torch
-import numpy as np
-from torch.utils.data import Dataset, DataLoader
-from model import LilithConfig, LilithModel
-from tokenizer import get_tokenizer
+import os  # type: ignore
+import time  # type: ignore
+import torch  # type: ignore
+import numpy as np  # type: ignore
+from torch.utils.data import Dataset, DataLoader  # type: ignore
+from model import LilithConfig, LilithModel  # type: ignore
+from tokenizer import get_tokenizer  # type: ignore
 
 class TextDataset(Dataset):
     def __init__(self, data_path, tokenizer, block_size):

@@ -1,10 +1,10 @@
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from PIL import Image
-import mss
-import mss.tools
-import os
-import time
+import torch  # type: ignore
+from transformers import AutoModelForCausalLM, AutoTokenizer  # type: ignore
+from PIL import Image  # type: ignore
+import mss  # type: ignore
+import mss.tools  # type: ignore
+import os  # type: ignore
+import time  # type: ignore
 
 class SightAgent:
     def __init__(self):

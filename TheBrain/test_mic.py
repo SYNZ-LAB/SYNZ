@@ -1,9 +1,9 @@
-import sounddevice as sd
-import numpy as np
-import whisper
-import socket
-import time
-import os
+import sounddevice as sd  # type: ignore
+import numpy as np  # type: ignore
+import whisper  # type: ignore
+import socket  # type: ignore
+import time  # type: ignore
+import os  # type: ignore
 
 # Configuration
 FACE_IP = "127.0.0.1"

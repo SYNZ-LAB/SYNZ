@@ -1,6 +1,6 @@
-import socket
-import json
-import time
+import socket  # type: ignore
+import json  # type: ignore
+import time  # type: ignore
 
 SERVER_IP = "127.0.0.1"
 SERVER_PORT = 5005

@@ -1,6 +1,6 @@
-import requests
-import json
-import threading
+import requests  # type: ignore
+import json  # type: ignore
+import threading  # type: ignore
 
 # Configuration for Local LLM (Ollama)
 OLLAMA_URL = "http://localhost:11434/api/generate"

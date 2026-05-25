@@ -1,7 +1,7 @@
-import asyncio
-import edge_tts
-import sys
-import warnings
+import asyncio  # type: ignore
+import edge_tts  # type: ignore
+import sys  # type: ignore
+import warnings  # type: ignore
 
 # [FIX] Suppress the asyncio warning on Windows
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -28,7 +28,7 @@ def generate_audio_sync(text, filename):
     try:
         if sys.platform == "win32":
             # Policy fix for Windows (Suppress warnings)
-            import warnings
+            import warnings  # type: ignore
             with warnings.catch_warnings():
                 warnings.filterwarnings("ignore", category=DeprecationWarning)
                 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())

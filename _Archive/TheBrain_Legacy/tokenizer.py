@@ -1,5 +1,5 @@
-import os
-from tokenizers import Tokenizer, models, pre_tokenizers, decoders, trainers, processors
+import os  # type: ignore
+from tokenizers import Tokenizer, models, pre_tokenizers, decoders, trainers, processors  # type: ignore
 
 def train_tokenizer(source_paths, vocab_size=50304, save_path="lilith_tokenizer.json"):
     """
@@ -61,7 +61,7 @@ def get_tokenizer(path="lilith_tokenizer.json"):
     return Tokenizer.from_file(path)
 
 if __name__ == "__main__":
-    import argparse
+    import argparse  # type: ignore
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir", type=str, help="Directory containing C#/C++ code", required=True)
     parser.add_argument("--vocab_size", type=int, default=50304)

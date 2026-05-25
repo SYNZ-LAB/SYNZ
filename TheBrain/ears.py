@@ -1,12 +1,11 @@
-import sounddevice as sd
-import numpy as np
-import whisper
-import socket
-import time
-import queue
-import queue
-import scipy.io.wavfile as wav
-import winsound # [NEW] For startup chime
+import sounddevice as sd  # type: ignore
+import numpy as np  # type: ignore
+import whisper  # type: ignore
+import socket  # type: ignore
+import time  # type: ignore
+import queue  # type: ignore
+import scipy.io.wavfile as wav  # type: ignore
+import winsound  # type: ignore
 
 # --- Configuration ---
 HOST_IP = "127.0.0.1"
@@ -17,8 +16,8 @@ THRESHOLD = 0.01
 SILENCE_DURATION = 0.6 # [OPT] Reduced for snappier response (was 0.8)
 
 # --- Paths & Model ---
-import sys
-import os
+import sys  # type: ignore
+import os  # type: ignore
 
 if getattr(sys, 'frozen', False):
     SCRIPT_DIR = os.path.dirname(sys.executable)
@@ -44,8 +43,8 @@ else:
     print("[EARS] Local model not found. Downloading 'base.en' (Faster)...")
     model = whisper.load_model("base.en")
 print("[EARS] Model Loaded. Listening...")
-winsound.Beep(1000, 200) # [NEW] Startup Chime (High Pitch)
-winsound.Beep(1500, 200)
+winsound.Beep(1000, 200)  # type: ignore
+winsound.Beep(1500, 200)  # type: ignore
 
 # [NEW] Hallucination Filters (Common Whisper Artifacts)
 HALLUCINATION_FILTERS = {
@@ -56,21 +55,6 @@ HALLUCINATION_FILTERS = {
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # ... (rest of binding)
-
-# ... (inside process_audio or main loop logic)
-def process_audio():
-    # ...
-    # After transcription:
-    text = result['text'].strip()
-    
-    # [FIX] Filter Hallucinations
-    clean_text = text.lower().strip(".?! ")
-    if not clean_text or clean_text in HALLUCINATION_FILTERS:
-        print(f"[EARS] Filtered Hallucination: '{text}'")
-        return
-        
-    print(f"[EARS] Heard: '{text}'")
-    # ... send to sock ...
 
 
 # [FIX] Main Socket (Sender & Receiver)
@@ -145,7 +129,7 @@ def main_loop():
                 # Drain audio buffer to prevent backlog while muted
                 while not audio_queue.empty():
                     audio_queue.get()
-                print(f"\r[EARS] Zzz... ({int(mute_until - time.time())}s)", end="", flush=True)
+                print(f"\r[EARS] Zzz... ({int(mute_until - time.time())}s)", end="", flush=True)  # type: ignore
                 time.sleep(0.1) # Small sleep to prevent busy-waiting
                 continue
 

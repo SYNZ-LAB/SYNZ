@@ -1,9 +1,9 @@
 
-import os
-import sys
-import shutil
-import subprocess
-import PyInstaller.__main__
+import os  # type: ignore
+import sys  # type: ignore
+import shutil  # type: ignore
+import subprocess  # type: ignore
+import PyInstaller.__main__  # type: ignore
 
 # Config
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -96,7 +96,7 @@ def main():
 if __name__ == "__main__":
     # Check for PyInstaller
     try:
-        import PyInstaller
+        import PyInstaller  # type: ignore
     except ImportError:
         print("Installing PyInstaller...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])

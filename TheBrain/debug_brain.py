@@ -1,7 +1,7 @@
-import torch
-import pickle
-import os
-from model import NanoSYNZ
+import torch  # type: ignore
+import pickle  # type: ignore
+import os  # type: ignore
+from model import NanoSYNZ  # type: ignore
 
 # Config
 script_dir = os.path.dirname(os.path.abspath(__file__))

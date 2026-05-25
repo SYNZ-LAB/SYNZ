@@ -1,5 +1,5 @@
-import socket
-import json
+import socket  # type: ignore
+import json  # type: ignore
 
 BODY_PORT = 5006
 

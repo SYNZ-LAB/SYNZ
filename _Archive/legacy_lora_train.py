@@ -1,9 +1,9 @@
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-from trl import SFTTrainer
-from datasets import load_dataset
-import os
+import torch  # type: ignore
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig  # type: ignore
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training  # type: ignore
+from trl import SFTTrainer  # type: ignore
+from datasets import load_dataset  # type: ignore
+import os  # type: ignore
 
 # --- Configuration ---
 MODEL_ID = "Qwen/Qwen2.5-Coder-1.5B-Instruct" # Base model (Matches our C++ engine)
@@ -57,7 +57,7 @@ def train():
     dataset = load_dataset("json", data_files=DATASET_FILE, split="train")
 
     # 5. Training Arguments (Updated for TRL 0.8+)
-    from trl import SFTConfig
+    from trl import SFTConfig  # type: ignore
     
     training_args = SFTConfig(
         output_dir=OUTPUT_DIR,

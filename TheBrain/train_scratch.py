@@ -1,10 +1,10 @@
 # 🏋️‍♀️ SYNZ Trainer (Manual Implementation)
-import torch
-import torch.nn as nn
-from torch.nn import functional as F
-from model import NanoSYNZ
-import json
-import os
+import torch  # type: ignore
+import torch.nn as nn  # type: ignore
+from torch.nn import functional as F  # type: ignore
+from model import NanoSYNZ  # type: ignore
+import json  # type: ignore
+import os  # type: ignore
 
 # --- Configuration ---
 batch_size = 32 # Contexts processed in parallel
@@ -55,7 +55,7 @@ chars = sorted(list(set(text)))
 vocab_size = len(chars)
 print(f"[SYNZ] Vocabulary Size: {vocab_size} | Chars: {''.join(chars)}")
 
-import pickle # [NEW]
+import pickle # [NEW]  # type: ignore
 stoi = { ch:i for i,ch in enumerate(chars) }
 itos = { i:ch for i,ch in enumerate(chars) }
 encode = lambda s: [stoi[c] for c in s] # Encoder: take a string, output a list of integers

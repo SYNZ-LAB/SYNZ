@@ -1,8 +1,8 @@
-import os
-import json
-import uuid
-import time
-from collections import Counter
+import os  # type: ignore
+import json  # type: ignore
+import uuid  # type: ignore
+import time  # type: ignore
+from collections import Counter  # type: ignore
 
 # --- SAFETY WRAPPER ---
 # We try to import ChromaDB, but since we know it fails on 3.14, we prioritize the JSON fallback logic

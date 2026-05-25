@@ -1,8 +1,8 @@
-import os
-import shutil
-import time
-import subprocess
-import sys
+import os  # type: ignore
+import shutil  # type: ignore
+import time  # type: ignore
+import subprocess  # type: ignore
+import sys  # type: ignore
 
 class EditorAgent:
     def __init__(self, root_dir="."):
